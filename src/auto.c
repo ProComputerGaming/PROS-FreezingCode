@@ -1,4 +1,5 @@
 #include "main.h"
+#include "auto.h"
 
 void autonZero(){
 //Left Square
@@ -259,6 +260,12 @@ void autonFourteen(){
 	waitForTasks();
 	openClaw();
 	waitForTasks(); //Drop fence stars
+}
+
+int programSelected(int segments){
+    int oneValue = clamp(analogRead(potOne)/(4095 / segments),0,segments - 1);
+    int twoValue = clamp(analogRead(potTwo)/(4095 / segments),0,segments - 1);
+    return oneValue + twoValue;
 }
 
 void autonomous() {

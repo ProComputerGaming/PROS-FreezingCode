@@ -4,7 +4,8 @@ void operatorControl() {
 			autonSelection = programSelected(8);
 	while (1) {
 
-
+		printf("Degrees: %d\n", gyroGet(gyro));
+		taskDelay(500);
 		bool liftTooHigh = analogRead(liftPot) < 825;
 		bool liftTooLow = analogRead(liftPot) > 3000;
 
