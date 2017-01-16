@@ -10,7 +10,7 @@ void autonZero(){
         waitForTasks();
         setSyncMove(FORWARD, 475);
         waitForTasks();
-        delay(200);
+        taskDelay(200);
         closeClaw(750);
         setSyncLift(625);
         waitForTasks();
@@ -75,7 +75,7 @@ void autonTwo(){
         waitForTasks();
         setSyncMove(FORWARD, 475);
         waitForTasks();
-        delay(200);
+        taskDelay(200);
         closeClaw(750);
         setSyncLift(625);
         waitForTasks();
@@ -174,14 +174,14 @@ void autonFourteen(){
 	waitForTasks();
 	openClaw();
 	waitForTasks();
-	delay(200);
+	taskDelay(200);
 	setSyncLift(650);
 	waitForTasks();
 	setSyncMove(BACKWARD, 100);
 	waitForTasks();
-	delay(1500);
+	taskDelay(1500);
 	closeClaw(750);
-	delay(1500);
+	taskDelay(1500);
 	setSyncMove(FORWARD, 950);
 	waitForTasks();
 	openClaw(); //Drop 3 star and cube combo
@@ -189,9 +189,9 @@ void autonFourteen(){
 
 	setSyncMove(BACKWARD, 950);
 	waitForTasks();
-	delay(1000);
+	taskDelay(1000);
 	closeClaw(750);
-	delay(1000);
+	taskDelay(1000);
 	setSyncMove(FORWARD, 950);
 	waitForTasks();
 	openClaw();
@@ -210,7 +210,7 @@ void autonFourteen(){
 	waitForTasks();
 	setSyncMove(FORWARD, 100);
 	waitForTasks();
-	delay(400);
+	taskDelay(400);
 	setSyncMove(LEFT, QUARTER);
 	waitForTasks();
 	setSyncMove(FORWARD, 475);
@@ -220,7 +220,7 @@ void autonFourteen(){
 	waitForTasks();
 	setSyncMove(BACKWARD, 275);
 	waitForTasks();
-	delay(400);
+	taskDelay(400);
 	setSyncMove(RIGHT, HALF + 50);
 	waitForTasks();
 	setSyncMove(BACKWARD, 100);
@@ -238,7 +238,7 @@ void autonFourteen(){
 	DRIVEBASE_POWER = 63;
 	setSyncMove(LEFT, HALF + 50);
 	waitForTasks();
-	delay(400);
+	taskDelay(400);
 	setSyncMove(FORWARD, 350);
 	waitForTasks();
 	openClaw(); //Drop field stars
@@ -261,6 +261,54 @@ void autonFourteen(){
 	waitForTasks(); //Drop fence stars
 }
 
-
 void autonomous() {
+  switch(autonSelection){
+	case 0:
+		autonZero();
+		break;
+	case 1:
+		autonOne();
+		break;
+	case 2:
+		autonTwo();
+		break;
+	case 3:
+		autonThree();
+		break;
+	case 4:
+		autonFour();
+		break;
+	case 5:
+		autonFive();
+		break;
+	case 6:
+		autonSix();
+		break;
+	case 7:
+		autonSeven();
+		break;
+	case 8:
+		autonEight();
+		break;
+	case 9:
+		autonNine();
+		break;
+	case 10:
+		autonTen();
+		break;
+	case 11:
+		autonEleven();
+		break;
+	case 12:
+		autonTwelve();
+		break;
+	case 13:
+		autonThirteen();
+		break;
+	case 14:
+		autonFourteen();
+		break;
+	default:
+		break;
+	}
 }
