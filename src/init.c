@@ -7,6 +7,8 @@ void initializeIO() {
 
 void initialize() {
 
+    printf("Defining Global Variables...\n");
+    
     WHEEL_CIR = PI * 4;
     TOLERANCE = .8;
     FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
@@ -17,7 +19,6 @@ void initialize() {
     DRIVEBASE_POWER = 63;
     CLAW_POWER = 127;
     LIFT_POWER = 127;
-    autonSelection = programSelected(8);
 
     wheelTargetTicks = 0;
     liftTargetTicks = 0;
@@ -35,13 +36,19 @@ void initialize() {
 
     runLift = false;
 
+    printf("Initializing Sensors...\n");
     liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
     rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
     leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
     gyro = gyroInit(gyroPort, 230);
-    printf("Initialization complete");
-    // liftMonitorHandle = taskCreate(liftMonitor, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    // wheelMonitorHandle = taskCreate(wheelMonitor, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    // motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    // fingerMonitorHandle = taskCreate(fingerMonitor, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+
+    printf("Creating Custom Task Handles...\n");
+    liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    clawMonitorHandle = taskCreate(clawMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+
+    printf("Reading Autonomous Potentiometers...\n");
+    autonSelection = programSelected(8);
+    printf("Selected Autonomous: %d\n", autonSelection);
 }

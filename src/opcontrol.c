@@ -1,18 +1,15 @@
 #include "main.h"
 
 void operatorControl() {
-			autonSelection = programSelected(8);
+	autonSelection = programSelected(8);
 	while (1) {
-
-		printf("Degrees: %d\n", gyroGet(gyro));
-		taskDelay(500);
 		bool liftTooHigh = analogRead(liftPot) < 825;
 		bool liftTooLow = analogRead(liftPot) > 3000;
 
 		if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
-					dLift(false);
+			dLift(false);
 		}else if(joystickGetDigital(1, 6, JOY_DOWN) && !liftTooLow){
-					dLift(true);
+			dLift(true);
 		}else{
 			stopLift();
 		}

@@ -1,7 +1,6 @@
 #include "main.h"
-#include "DriveBase.h"
 
-void wheelMonitor(void *parameter){
+void wheelMonitorTask(void *parameter){
     while(true){
         while(runWheels){
             if(abs(encoderGet(leftQuad)) < wheelTargetTicks){

@@ -1,7 +1,6 @@
 #include "main.h"
-#include "Claw.h"
 
-void fingerMonitor(void *parameter){
+void clawMonitorTask(void *parameter){
     fingerNeedsToOpen = (digitalRead(leftFingerSwitchPort) == 1 || digitalRead(rightFingerSwitchPort) == 1);
     while(true){
         if(downPressure == true && runFinger == false){

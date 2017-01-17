@@ -1,8 +1,6 @@
 #include "main.h"
-#include "Lift.h"
 
-
-void liftMonitor(void *parameter){
+void liftMonitorTask(void *parameter){
     while(true){
         while(runLift){
             bool needsToLower = (abs(encoderGet(liftQuad)) > liftTargetTicks) ? true : false;
