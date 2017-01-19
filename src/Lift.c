@@ -30,15 +30,15 @@ void setSyncLift(int targetTicks){
 }
 
 void dLift(bool down){
-    motorReq[upperLift] = down ? -LIFT_POWER : LIFT_POWER;
-    motorReq[lowerRightLift] = down ? -LIFT_POWER : LIFT_POWER;
-    motorReq[lowerLeftLift] = down ? -LIFT_POWER : LIFT_POWER;
+    motorReq[upperLift - 1] = down ? LIFT_POWER : -LIFT_POWER;
+    motorReq[lowerRightLift - 1] = down ? LIFT_POWER : -LIFT_POWER;
+    motorReq[lowerLeftLift - 1] = down ? LIFT_POWER : -LIFT_POWER;
 }
 
 void stopLift(){
-    motorReq[upperLift] = 0;
-    motorReq[lowerRightLift] = 0;
-    motorReq[lowerLeftLift] = 0;
+    motorReq[upperLift - 1] = 0;
+    motorReq[lowerRightLift - 1] = 0;
+    motorReq[lowerLeftLift - 1] = 0;
     motorStop(upperLift);
     motorStop(lowerRightLift);
     motorStop(lowerLeftLift);

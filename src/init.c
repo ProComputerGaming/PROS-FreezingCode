@@ -8,7 +8,7 @@ void initializeIO() {
 void initialize() {
 
     printf("Defining Global Variables...\n");
-    
+
     WHEEL_CIR = PI * 4;
     TOLERANCE = .8;
     FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);

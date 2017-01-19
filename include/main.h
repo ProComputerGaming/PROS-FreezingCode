@@ -17,8 +17,10 @@ extern "C" {
     #define frontRight 8
 
     //Lift Motors
+    //Reversed
     #define lowerRightLift 2
     #define upperLift 4
+    
     #define lowerLeftLift 9
 
     //Claw Motors

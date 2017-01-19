@@ -2,6 +2,7 @@
 
 void motorSlewTask(void *parameter){
     int motorIndex;
+    int motorPort;
     int motorTmp;
 
     for(motorIndex=0;motorIndex<MOTOR_NUM;motorIndex++)
@@ -14,8 +15,8 @@ void motorSlewTask(void *parameter){
     {
         for( motorIndex=0; motorIndex<MOTOR_NUM; motorIndex++)
         {
-
-            motorTmp = motorGet(motorIndex);
+            motorPort = motorIndex + 1;
+            motorTmp = motorGet(motorPort);
 
             if( motorTmp != motorReq[motorIndex] )
             {
@@ -32,14 +33,20 @@ void motorSlewTask(void *parameter){
                 if( motorReq[motorIndex] < motorTmp )
                 {
                     motorTmp -= motorSlew[motorIndex];
-                    // limit
+
                     if( motorTmp < motorReq[motorIndex] )
                     motorTmp = motorReq[motorIndex];
                 }
-                motorSet(motorIndex, motorTmp);
+
+                //Reverse Necessary Motors
+                if(motorPort == lowerLeftLift  || motorPort == backRight || motorPort == frontRight){ //
+                  motorSet(motorPort, -motorTmp);
+                }else{
+                  motorSet(motorPort, motorTmp);
+                }
             }
         }
-        taskDelay( MOTOR_TASK_DELAY );
+        delay( MOTOR_TASK_DELAY );
     }
 }
 

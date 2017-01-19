@@ -2,13 +2,20 @@
 
 void operatorControl() {
 	autonSelection = programSelected(8);
-	while (1) {
-		bool liftTooHigh = analogRead(liftPot) < 825;
-		bool liftTooLow = analogRead(liftPot) > 3000;
 
-		if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
+	while (1) {
+
+		// if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
+		// 	dLift(false);
+		// }else if(joystickGetDigital(1, 6, JOY_DOWN) && !liftTooLow){
+		// 	dLift(true);
+		// }else{
+		// 	stopLift();
+		// }
+
+		if(joystickGetDigital(1, 6, JOY_UP)){
 			dLift(false);
-		}else if(joystickGetDigital(1, 6, JOY_DOWN) && !liftTooLow){
+		}else if(joystickGetDigital(1, 6, JOY_DOWN)){
 			dLift(true);
 		}else{
 			stopLift();
@@ -16,7 +23,7 @@ void operatorControl() {
 
 		if(joystickGetDigital(1, 5, JOY_DOWN)){
 			closeClaw(OFF);
-		}else if(joystickGetDigital(1, 5, JOY_UP) == 1){
+		}else if(joystickGetDigital(1, 5, JOY_UP)){
 			openClaw();
 		}
 
