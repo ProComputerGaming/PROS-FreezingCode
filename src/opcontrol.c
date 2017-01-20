@@ -29,11 +29,9 @@ void operatorControl() {
 
 		if(joystickGetDigital(1, 7, JOY_RIGHT)){
 			strafeRight(OFF);
-		}
-		if(joystickGetDigital(1, 7, JOY_LEFT)){
+		}else if(joystickGetDigital(1, 7, JOY_LEFT)){
 			strafeLeft(OFF);
-		}
-		if(joystickGetDigital(1, 7, JOY_RIGHT) == OFF && joystickGetDigital(1, 7, JOY_LEFT) == OFF){
+		}else{
 			analogDrive();
 		}
 	}

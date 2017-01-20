@@ -20,7 +20,7 @@ extern "C" {
     //Reversed
     #define lowerRightLift 2
     #define upperLift 4
-    
+
     #define lowerLeftLift 9
 
     //Claw Motors
@@ -101,6 +101,7 @@ extern "C" {
     TaskHandle liftMonitorHandle;
     TaskHandle motorSlewHandle;
 
+    void requestMotor(int motorPort, int speed);
     int programSelected(int segments);
     int clamp(int var, int min, int max);
 

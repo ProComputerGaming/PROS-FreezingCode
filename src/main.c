@@ -38,16 +38,19 @@ void motorSlewTask(void *parameter){
                     motorTmp = motorReq[motorIndex];
                 }
 
-                //Reverse Necessary Motors
-                if(motorPort == lowerLeftLift  || motorPort == backRight || motorPort == frontRight){ //
-                  motorSet(motorPort, -motorTmp);
-                }else{
                   motorSet(motorPort, motorTmp);
-                }
             }
         }
         delay( MOTOR_TASK_DELAY );
     }
+}
+
+void requestMotor(int motorPort, int speed){
+  if(motorPort == lowerRightLift || motorPort == upperLift || motorPort == frontRight || motorPort == backRight){
+    motorReq[motorPort - 1] = -speed;
+  }else{
+    motorReq[motorPort - 1] = speed;
+  }
 }
 
 void waitForTasks(){
