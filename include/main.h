@@ -17,10 +17,8 @@ extern "C" {
     #define frontRight 8
 
     //Lift Motors
-    //Reversed
     #define lowerRightLift 2
     #define upperLift 4
-
     #define lowerLeftLift 9
 
     //Claw Motors
@@ -94,14 +92,12 @@ extern "C" {
     Encoder liftQuad;
     Encoder rightQuad;
     Encoder leftQuad;
-    Gyro gyro;
 
     TaskHandle clawMonitorHandle;
     TaskHandle wheelMonitorHandle;
     TaskHandle liftMonitorHandle;
     TaskHandle motorSlewHandle;
 
-    void requestMotor(int motorPort, int speed);
     int programSelected(int segments);
     int clamp(int var, int min, int max);
 

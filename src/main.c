@@ -45,14 +45,6 @@ void motorSlewTask(void *parameter){
     }
 }
 
-void requestMotor(int motorPort, int speed){
-  if(motorPort == lowerRightLift || motorPort == upperLift || motorPort == frontRight || motorPort == backRight){
-    motorReq[motorPort - 1] = -speed;
-  }else{
-    motorReq[motorPort - 1] = speed;
-  }
-}
-
 void waitForTasks(){
     while(runFinger == true || runWheels == true || runLift == true){
 

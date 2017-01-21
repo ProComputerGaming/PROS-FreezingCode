@@ -1,7 +1,7 @@
 #include "main.h"
 
 void autonZero(){
-    //Left Square
+    //Left 
     setSyncMove(FORWARD, 400);
     waitForTasks();
     setSyncMove(RIGHT, QUARTER);

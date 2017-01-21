@@ -50,28 +50,28 @@ void dLeft(bool backwards, bool bypassSlew){
         motorReq[backLeft - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[frontLeft - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
     }else{
-        requestMotor(backLeft, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);//motorReq[backLeft - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
-        requestMotor(frontLeft, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);//motorReq[frontLeft - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[backLeft - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[frontLeft - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
     }
 }
 
 void dRight(bool backwards, bool bypassSlew){
     if(bypassSlew){
-        motorSet(backRight, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);
-        motorSet(frontRight, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);
-        motorReq[backRight - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
-        motorReq[frontRight - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorSet(backRight, backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER);
+        motorSet(frontRight, backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER);
+        motorReq[backRight - 1] = backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER;
+        motorReq[frontRight - 1] = backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER;
     }else{
-        motorReq[backRight - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
-        motorReq[frontRight - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        motorReq[backRight - 1] = backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER;
+        motorReq[frontRight - 1] = backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER;
     }
 }
 
 void analogDrive(){
-    requestMotor(backRight, joystickGetAnalog(1, 2)); //motorReq[backRight - 1] = joystickGetAnalog(1, 2);
-    requestMotor(frontRight, joystickGetAnalog(1, 2)); //motorReq[frontRight - 1] = joystickGetAnalog(1, 2);
-      requestMotor(backLeft, joystickGetAnalog(1, 3));// motorReq[backLeft - 1] = joystickGetAnalog(1, 3);
-      requestMotor(frontLeft, joystickGetAnalog(1, 3));//motorReq[frontLeft - 1] = joystickGetAnalog(1, 3);
+    motorReq[backRight - 1] = -joystickGetAnalog(1, 2);
+    motorReq[frontRight - 1] = -joystickGetAnalog(1, 2);
+    motorReq[backLeft - 1] = joystickGetAnalog(1, 3);
+    motorReq[frontLeft - 1] = joystickGetAnalog(1, 3);
 }
 
 void strafeLeft(int millis){
@@ -80,7 +80,7 @@ void strafeLeft(int millis){
         motorReq[frontRight - 1] = 127;
         motorReq[backLeft - 1] = 127;
         motorReq[frontLeft - 1] = -127;
-        taskDelay(millis);
+        delay(millis);
         stopDrive();
     }else{
         motorReq[backRight - 1] = -127;
@@ -96,7 +96,7 @@ void strafeRight(int millis){
         motorReq[frontRight - 1] = -127;
         motorReq[backLeft - 1] = -127;
         motorReq[frontLeft - 1] = 127;
-        taskDelay(millis);
+        delay(millis);
         stopDrive();
     }else{
         motorReq[backRight - 1] = 127;

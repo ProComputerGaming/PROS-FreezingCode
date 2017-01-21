@@ -2,16 +2,10 @@
 
 void operatorControl() {
 	autonSelection = programSelected(8);
+	taskDelete(wheelMonitorHandle);
+	taskDelete(liftMonitorHandle);
 
 	while (1) {
-
-		// if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
-		// 	dLift(false);
-		// }else if(joystickGetDigital(1, 6, JOY_DOWN) && !liftTooLow){
-		// 	dLift(true);
-		// }else{
-		// 	stopLift();
-		// }
 
 		if(joystickGetDigital(1, 6, JOY_UP)){
 			dLift(false);
@@ -27,12 +21,7 @@ void operatorControl() {
 			openClaw();
 		}
 
-		if(joystickGetDigital(1, 7, JOY_RIGHT)){
-			strafeRight(OFF);
-		}else if(joystickGetDigital(1, 7, JOY_LEFT)){
-			strafeLeft(OFF);
-		}else{
-			analogDrive();
-		}
+		analogDrive();
+		delay(2);
 	}
 }
