@@ -3,13 +3,14 @@
 void operatorControl() {
 	autonSelection = programSelected(8);
 
-	taskResume(motorSlewHandle);
-	taskResume(clawMonitorHandle);
 	while (1) {
 
-		if(joystickGetDigital(1, 6, JOY_UP)){
+		bool liftTooHigh = analogRead(6) < 800;
+		bool liftTooLow = analogRead(6) > 3000;
+
+		if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
 			dLift(false);
-		}else if(joystickGetDigital(1, 6, JOY_DOWN)){
+		}else if(joystickGetDigital(1, 6, JOY_DOWN) && !liftTooLow){
 			dLift(true);
 		}else{
 			stopLift();
@@ -22,6 +23,7 @@ void operatorControl() {
 		}
 
 		analogDrive();
+
 		delay(20);
 	}
 }

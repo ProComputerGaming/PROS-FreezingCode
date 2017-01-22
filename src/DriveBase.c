@@ -28,7 +28,7 @@ void wheelMonitorTask(void *parameter){
                 stopRight();
             }
             if(leftDone && rightDone)
-              runWheels = false;
+            runWheels = false;
             delay(10);
         }
         stopDrive();
@@ -46,88 +46,171 @@ void setSyncMove(enum WheelDirection d, int targetTicks){
 
 void dLeft(bool backwards, bool bypassSlew){
     if(bypassSlew){
+        mutexTake(motorMutexes[backLeft - 1], -1);
         motorSet(backLeft, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);
+        mutexGive(motorMutexes[backLeft - 1]);
+
+        mutexTake(motorMutexes[backRight - 1], -1);
         motorSet(frontLeft, backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER);
+        mutexGive(motorMutexes[backRight - 1]);
+
+        mutexTake(motorReqMutex, -1);
         motorReq[backLeft - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[frontLeft - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        mutexGive(motorReqMutex);
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backLeft - 1] = backwards ?  -DRIVEBASE_POWER : DRIVEBASE_POWER;
         motorReq[frontLeft - 1] = backwards ? -DRIVEBASE_POWER : DRIVEBASE_POWER;
+        mutexGive(motorReqMutex);
     }
 }
 
 void dRight(bool backwards, bool bypassSlew){
     if(bypassSlew){
-        motorSet(backRight, backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER);
+        mutexTake(motorMutexes[frontRight - 1], -1);
         motorSet(frontRight, backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER);
+        mutexGive(motorMutexes[frontRight - 1]);
+
+        mutexTake(motorMutexes[backRight - 1], -1);
+        motorSet(backRight, backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER);
+        mutexGive(motorMutexes[backRight - 1]);
+
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER;
         motorReq[frontRight - 1] = backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER;
+        mutexGive(motorReqMutex);
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = backwards ?  DRIVEBASE_POWER : -DRIVEBASE_POWER;
         motorReq[frontRight - 1] = backwards ? DRIVEBASE_POWER : -DRIVEBASE_POWER;
+        mutexGive(motorReqMutex);
     }
 }
 
 void analogDrive(){
-    motorReq[backRight - 1] = -joystickGetAnalog(1, 2);
-    motorReq[frontRight - 1] = -joystickGetAnalog(1, 2);
-    motorReq[backLeft - 1] = joystickGetAnalog(1, 3);
-    motorReq[frontLeft - 1] = joystickGetAnalog(1, 3);
+    mutexTake(motorReqMutex, -1);
+    if((joystickGetAnalog(1, 2) > 0 && joystickGetAnalog(1, 3) < 0) || (joystickGetAnalog(1, 2) < 0 && joystickGetAnalog(1, 3) > 0)){
+        if(abs(joystickGetAnalog(1, 2)) > ANALOG_DEADZONE){
+            motorReq[backRight - 1] = -joystickGetAnalog(1, 2) * TURN_MULTIPLIER;
+            motorReq[frontRight - 1] = -joystickGetAnalog(1, 2) * TURN_MULTIPLIER;
+        }else{
+            motorReq[backRight - 1] = 0;
+            motorReq[frontRight - 1] = 0;
+        }
+
+        if(abs(joystickGetAnalog(1, 3)) > ANALOG_DEADZONE){
+            motorReq[backLeft - 1] = joystickGetAnalog(1, 3) * TURN_MULTIPLIER;
+            motorReq[frontLeft - 1] = joystickGetAnalog(1, 3) * TURN_MULTIPLIER;
+        }else{
+            motorReq[backLeft - 1] = 0;
+            motorReq[frontLeft - 1] = 0;
+        }
+    }else{
+        if(abs(joystickGetAnalog(1, 2)) > ANALOG_DEADZONE){
+            motorReq[backRight - 1] = -joystickGetAnalog(1, 2);
+            motorReq[frontRight - 1] = -joystickGetAnalog(1, 2);
+        }else{
+            motorReq[backRight - 1] = 0;
+            motorReq[frontRight - 1] = 0;
+        }
+
+        if(abs(joystickGetAnalog(1, 3)) > ANALOG_DEADZONE){
+            motorReq[backLeft - 1] = joystickGetAnalog(1, 3);
+            motorReq[frontLeft - 1] = joystickGetAnalog(1, 3);
+        }else{
+            motorReq[backLeft - 1] = 0;
+            motorReq[frontLeft - 1] = 0;
+        }
+    }
+    mutexGive(motorReqMutex);
 }
 
 void strafeLeft(int millis){
     if(millis != 0){
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = -127;
         motorReq[frontRight - 1] = 127;
         motorReq[backLeft - 1] = 127;
         motorReq[frontLeft - 1] = -127;
+        mutexGive(motorReqMutex);
+
         delay(millis);
+
         stopDrive();
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = -127;
         motorReq[frontRight - 1] = 127;
         motorReq[backLeft - 1] = 127;
         motorReq[frontLeft - 1] = -127;
+        mutexGive(motorReqMutex);
     }
 }
 
 void strafeRight(int millis){
     if(millis != 0){
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = 127;
         motorReq[frontRight - 1] = -127;
         motorReq[backLeft - 1] = -127;
         motorReq[frontLeft - 1] = 127;
+        mutexGive(motorReqMutex);
+
         delay(millis);
+
         stopDrive();
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = 127;
         motorReq[frontRight - 1] = -127;
         motorReq[backLeft - 1] = -127;
         motorReq[frontLeft - 1] = 127;
+        mutexGive(motorReqMutex);
     }
 }
 
 void stopLeft(){
     if(isAutonomous()){
-        motorStop(backLeft);
+        mutexTake(motorMutexes[frontLeft - 1], -1);
         motorStop(frontLeft);
+        mutexGive(motorMutexes[frontLeft - 1]);
+
+        mutexTake(motorMutexes[backLeft - 1], -1);
+        motorStop(backLeft);
+        mutexGive(motorMutexes[backLeft - 1]);
+
+        mutexTake(motorReqMutex, -1);
         motorReq[backLeft - 1] = 0;
         motorReq[frontLeft - 1] = 0;
+        mutexGive(motorReqMutex);
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backLeft - 1] = 0;
         motorReq[frontLeft - 1] = 0;
+        mutexGive(motorReqMutex);
     }
 }
 
 void stopRight(){
     if(isAutonomous()){
-        motorStop(backRight);
+        mutexTake(motorMutexes[frontRight - 1], -1);
         motorStop(frontRight);
+        mutexGive(motorMutexes[frontRight - 1]);
+
+        mutexTake(motorMutexes[backRight - 1], -1);
+        motorStop(backRight);
+        mutexGive(motorMutexes[backRight - 1]);
+
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = 0;
         motorReq[frontRight - 1] = 0;
+        mutexGive(motorReqMutex);
     }else{
+        mutexTake(motorReqMutex, -1);
         motorReq[backRight - 1] = 0;
         motorReq[frontRight - 1] = 0;
+        mutexGive(motorReqMutex);
     }
 }
 

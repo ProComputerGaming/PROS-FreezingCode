@@ -24,17 +24,32 @@ void clawMonitorTask(void *parameter){
 
 void closeClaw(int millis){
     if(millis != 0){
+        mutexTake(motorMutexes[fingerY - 1], -1);
         motorSet(fingerY, CLAW_POWER);
-        taskDelay(millis);
+        mutexGive(motorMutexes[fingerY - 1]);
+
+        mutexTake(motorReqMutex, -1);
+        motorReq[fingerY - 1] = CLAW_POWER;
+        mutexGive(motorReqMutex);
+
+        delay(millis);
+
+        mutexTake(motorMutexes[fingerY - 1], -1);
         motorStop(fingerY);
+        mutexGive(motorMutexes[fingerY - 1]);
     }else{
+        mutexTake(motorMutexes[fingerY - 1], -1);
         motorSet(fingerY, CLAW_POWER);
+        mutexGive(motorMutexes[fingerY - 1]);
     }
     downPressure = true;
 }
 
 void openClaw(){
+    mutexTake(motorMutexes[fingerY - 1], -1);
     motorSet(fingerY, -CLAW_POWER);
+    mutexGive(motorMutexes[fingerY - 1]);
+
     downPressure = false;
     fingerNeedsToOpen = true;
     runFinger = true;

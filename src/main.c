@@ -5,67 +5,55 @@ void motorSlewTask(void *parameter){
     int motorPort;
     int motorTmp;
 
+    mutexTake(motorReqMutex, -1);
     for(motorIndex=0;motorIndex<MOTOR_NUM;motorIndex++)
     {
         motorReq[motorIndex] = 0;
         motorSlew[motorIndex] = MOTOR_DEFAULT_SLEW_RATE;
     }
+    mutexGive(motorReqMutex);
 
     while( true )
     {
+        int requestCopy[10];
+
+        mutexTake(motorReqMutex, -1);
+        for(int i = 0; i < 10; i++){
+            requestCopy[i] = motorReq[i];
+        }
+        mutexGive(motorReqMutex);
         for( motorIndex=0; motorIndex<MOTOR_NUM; motorIndex++)
         {
             motorPort = motorIndex + 1;
+            mutexTake(motorMutexes[motorIndex], -1);
             motorTmp = motorGet(motorPort);
-
-            if( motorTmp != motorReq[motorIndex] )
+            mutexGive(motorMutexes[motorIndex]);
+            if( motorTmp != requestCopy[motorIndex] )
             {
 
-                if( motorReq[motorIndex] > motorTmp )
+                if( requestCopy[motorIndex] > motorTmp )
                 {
 
                     motorTmp += motorSlew[motorIndex];
 
-                    if( motorTmp > motorReq[motorIndex] )
-                    motorTmp = motorReq[motorIndex];
+                    if( motorTmp > requestCopy[motorIndex] )
+                    motorTmp = requestCopy[motorIndex];
                 }
 
-                if( motorReq[motorIndex] < motorTmp )
+                if( requestCopy[motorIndex] < motorTmp )
                 {
                     motorTmp -= motorSlew[motorIndex];
 
-                    if( motorTmp < motorReq[motorIndex] )
-                    motorTmp = motorReq[motorIndex];
+                    if( motorTmp < requestCopy[motorIndex] )
+                    motorTmp = requestCopy[motorIndex];
                 }
 
+                mutexTake(motorMutexes[motorIndex], -1);
                 motorSet(motorPort, motorTmp);
+                mutexGive(motorMutexes[motorIndex]);
             }
         }
         delay( MOTOR_TASK_DELAY );
-    }
-}
-
-void taskMonitorTask(void *parameter){
-    bool tasksRunning = false;
-    while(1){
-        if(isEnabled() && isAutonomous() && tasksRunning == false){
-            taskResume(liftMonitorHandle);
-            taskResume(wheelMonitorHandle);
-            taskResume(motorSlewHandle);
-            taskResume(clawMonitorHandle);
-            tasksRunning = true;
-        }else if(isEnabled() && !isAutonomous() && tasksRunning == false){
-            taskResume(motorSlewHandle);
-            taskResume(clawMonitorHandle);
-            tasksRunning = true;
-        }else{
-            taskSuspend(liftMonitorHandle);
-            taskSuspend(wheelMonitorHandle);
-            taskSuspend(motorSlewHandle);
-            taskSuspend(clawMonitorHandle);
-            tasksRunning = false;
-        }
-        delay(20);
     }
 }
 
@@ -78,7 +66,10 @@ void waitForTasks(){
 void stopAllMotors(){
     stopDrive();
     stopLift();
+
+    mutexTake(motorMutexes[fingerY - 1], -1);
     motorStop(fingerY);
+    mutexGive(motorMutexes[fingerY - 1]);
 }
 
 void zeroDriveSensors(){

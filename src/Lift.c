@@ -34,16 +34,29 @@ void setSyncLift(int targetTicks){
 }
 
 void dLift(bool down){
+    mutexTake(motorReqMutex, -1);
     motorReq[upperLift - 1] = down ? LIFT_POWER : -LIFT_POWER;
     motorReq[lowerRightLift - 1] = down ? LIFT_POWER : -LIFT_POWER;
     motorReq[lowerLeftLift - 1] = down ? -LIFT_POWER : LIFT_POWER;
+    mutexGive(motorReqMutex);
 }
 
 void stopLift(){
+    mutexTake(motorReqMutex, -1);
     motorReq[upperLift - 1] = 0;
     motorReq[lowerRightLift - 1] = 0;
     motorReq[lowerLeftLift - 1] = 0;
+    mutexGive(motorReqMutex);
+
+    mutexTake(motorMutexes[upperLift - 1], -1);
     motorStop(upperLift);
+    mutexGive(motorMutexes[upperLift - 1]);
+
+    mutexTake(motorMutexes[lowerRightLift - 1], -1);
     motorStop(lowerRightLift);
+    mutexGive(motorMutexes[lowerRightLift - 1]);
+
+    mutexTake(motorMutexes[lowerLeftLift - 1], -1);
     motorStop(lowerLeftLift);
+    mutexGive(motorMutexes[lowerLeftLift - 1]);
 }
