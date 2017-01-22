@@ -29,6 +29,7 @@ void wheelMonitorTask(void *parameter){
             }
             if(leftDone && rightDone)
               runWheels = false;
+            delay(10);
         }
         stopDrive();
     }

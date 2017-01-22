@@ -1,7 +1,7 @@
 #include "main.h"
 
 void autonZero(){
-    //Left 
+    //Left
     setSyncMove(FORWARD, 400);
     waitForTasks();
     setSyncMove(RIGHT, QUARTER);
@@ -261,6 +261,11 @@ void autonFourteen(){
 }
 
 void autonomous() {
+    autonSelection = programSelected(8);
+    taskResume(liftMonitorHandle);
+    taskResume(wheelMonitorHandle);
+    taskResume(motorSlewHandle);
+    taskResume(clawMonitorHandle);
     switch(autonSelection){
         case 0:
         autonZero();
@@ -310,4 +315,8 @@ void autonomous() {
         default:
         break;
     }
+    taskSuspend(liftMonitorHandle);
+    taskSuspend(wheelMonitorHandle);
+    taskSuspend(motorSlewHandle);
+    taskSuspend(clawMonitorHandle);
 }

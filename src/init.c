@@ -33,15 +33,19 @@ void initialize() {
 
     runLift = false;
 
+    lcdInit(uart1);
+    lcdClear(uart1);
+
     liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
     rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
     leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
 
     liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
     clawMonitorHandle = taskCreate(clawMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    //debugHandle = taskCreate(debugTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
+    taskMonitorHandle = taskCreate(taskMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
+
 
     autonSelection = programSelected(8);
 }

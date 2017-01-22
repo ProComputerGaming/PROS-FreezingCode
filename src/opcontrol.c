@@ -2,9 +2,9 @@
 
 void operatorControl() {
 	autonSelection = programSelected(8);
-	taskDelete(wheelMonitorHandle);
-	taskDelete(liftMonitorHandle);
 
+	taskResume(motorSlewHandle);
+	taskResume(clawMonitorHandle);
 	while (1) {
 
 		if(joystickGetDigital(1, 6, JOY_UP)){
@@ -22,6 +22,6 @@ void operatorControl() {
 		}
 
 		analogDrive();
-		delay(2);
+		delay(20);
 	}
 }

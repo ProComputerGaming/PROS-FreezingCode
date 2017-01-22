@@ -38,10 +38,34 @@ void motorSlewTask(void *parameter){
                     motorTmp = motorReq[motorIndex];
                 }
 
-                  motorSet(motorPort, motorTmp);
+                motorSet(motorPort, motorTmp);
             }
         }
         delay( MOTOR_TASK_DELAY );
+    }
+}
+
+void taskMonitorTask(void *parameter){
+    bool tasksRunning = false;
+    while(1){
+        if(isEnabled() && isAutonomous() && tasksRunning == false){
+            taskResume(liftMonitorHandle);
+            taskResume(wheelMonitorHandle);
+            taskResume(motorSlewHandle);
+            taskResume(clawMonitorHandle);
+            tasksRunning = true;
+        }else if(isEnabled() && !isAutonomous() && tasksRunning == false){
+            taskResume(motorSlewHandle);
+            taskResume(clawMonitorHandle);
+            tasksRunning = true;
+        }else{
+            taskSuspend(liftMonitorHandle);
+            taskSuspend(wheelMonitorHandle);
+            taskSuspend(motorSlewHandle);
+            taskSuspend(clawMonitorHandle);
+            tasksRunning = false;
+        }
+        delay(20);
     }
 }
 

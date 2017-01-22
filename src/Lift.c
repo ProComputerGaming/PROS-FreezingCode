@@ -8,6 +8,7 @@ void liftMonitorTask(void *parameter){
                 case true:
                 while(abs(encoderGet(liftQuad)) > liftTargetTicks){
                     dLift(needsToLower);
+                    delay(10);
                 }
                 stopLift();
                 runLift = false;
@@ -15,12 +16,15 @@ void liftMonitorTask(void *parameter){
                 case false:
                 while(abs(encoderGet(liftQuad)) < liftTargetTicks){
                     dLift(needsToLower);
+                    delay(10);
                 }
                 stopLift();
                 runLift = false;
                 break;
             }
+            delay(10);
         }
+        delay(10);
     }
 }
 

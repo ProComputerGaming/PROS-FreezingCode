@@ -16,7 +16,9 @@ void clawMonitorTask(void *parameter){
             if(fingerNeedsToOpen == false || (joystickGetDigital(1, 5, JOY_DOWN) && !isAutonomous())){
                 runFinger = false;
             }
+            delay(10);
         }
+        delay(10);
     }
 }
 

@@ -40,9 +40,9 @@ extern "C" {
     #define MOTOR_NUM 10
     #define MOTOR_MAX_VALUE 127
     #define MOTOR_MIN_VALUE -127
-    #define MOTOR_DEFAULT_SLEW_RATE 10
+    #define MOTOR_DEFAULT_SLEW_RATE 15
     #define MOTOR_FAST_SLEW_RATE 256
-    #define MOTOR_TASK_DELAY 15
+    #define MOTOR_TASK_DELAY 20
     #define MOTOR_DEADBAND 10
 
     int motorSlew[MOTOR_NUM]; //Array containing the slew rates for each individual motor port
@@ -97,9 +97,12 @@ extern "C" {
     TaskHandle wheelMonitorHandle;
     TaskHandle liftMonitorHandle;
     TaskHandle motorSlewHandle;
+    TaskHandle taskMonitorHandle;
 
     int programSelected(int segments);
     int clamp(int var, int min, int max);
+
+    void taskMonitorTask(void *parameter);
 
     void motorSlewTask(void *parameter);
     void waitForTasks();
