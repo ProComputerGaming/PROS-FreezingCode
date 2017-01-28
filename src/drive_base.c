@@ -2,9 +2,26 @@
 
 void wheelMonitorTask(void *parameter){
     while(true){
-        while(runWheels){
-            if(abs(encoderGet(leftQuad)) < wheelTargetTicks){
-                switch(wheelDir){
+        bool dLeftDirection = false;
+        bool dRightDirection = false;
+        bool leftDone = false;
+        bool rightDone = false;
+
+        mutexTake(runWheelsMutex, -1);
+        bool run = runWheels;
+        mutexGive(runWheelsMutex);
+
+        mutexTake(driveTicksMutex, -1);
+        int target = wheelTargetTicks;
+        mutexGive(driveTicksMutex);
+
+        mutexTake(wheelDirMutex, -1);
+        enum WheelDirection d = wheelDir;
+        mutexGive(wheelDirMutex);
+
+        while(run){
+            if(abs(encoderGet(leftQuad)) < target){
+                switch(d){
                     case FORWARD: dLeftDirection = false; break;
                     case BACKWARD: dLeftDirection = true; break;
                     case LEFT: dLeftDirection = true; break;
@@ -15,8 +32,8 @@ void wheelMonitorTask(void *parameter){
                 leftDone = true;
                 stopLeft();
             }
-            if(abs(encoderGet(rightQuad)) < wheelTargetTicks){
-                switch(wheelDir){
+            if(abs(encoderGet(rightQuad)) < target){
+                switch(d){
                     case FORWARD: dRightDirection = false; break;
                     case BACKWARD: dRightDirection = true; break;
                     case LEFT: dRightDirection = false; break;
@@ -27,21 +44,33 @@ void wheelMonitorTask(void *parameter){
                 rightDone = true;
                 stopRight();
             }
-            if(leftDone && rightDone)
-            runWheels = false;
-            delay(10);
+            if(leftDone && rightDone){
+                run = false;
+
+                mutexTake(runWheelsMutex, -1);
+                runWheels = false;
+                mutexGive(runWheelsMutex);
+                stopDrive();
+            }
+            delay(20);
         }
-        stopDrive();
     }
 }
 
 void setSyncMove(enum WheelDirection d, int targetTicks){
-    wheelTargetTicks = targetTicks;
-    wheelDir = d;
-    leftDone = false;
-    rightDone = false;
-    zeroDriveSensors();
-    runWheels = true;
+    mutexTake(driveTicksMutex, -1);
+   wheelTargetTicks = targetTicks;
+   mutexGive(driveTicksMutex);
+
+   mutexTake(wheelDirMutex, -1);
+   wheelDir = d;
+   mutexGive(wheelDirMutex);
+
+   zeroDriveSensors();
+
+   mutexTake(runWheelsMutex, -1);
+   runWheels = true;
+   mutexGive(runWheelsMutex);
 }
 
 void dLeft(bool backwards, bool bypassSlew){

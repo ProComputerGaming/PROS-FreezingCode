@@ -26,30 +26,50 @@ void initialize() {
     fingerNeedsToOpen = false;
 
     wheelDir = FORWARD;
-    dLeftDirection = false;
-    dRightDirection = false;
     runWheels = false;
-    leftDone = false;
-    rightDone = false;
 
     runLift = false;
 
-    lcdInit(uart1);
-    lcdClear(uart1);
+    liftPIDRunning = false;
+    liftPGain = .05;
+    liftIGain = .025;
+    liftDGain = .015;
+    liftDerivative = 0;
+    lastLiftError = 0;
+    liftError = 0;
+    liftLastError = 0;
+    liftCumError = 0;
+    liftOutput = 0;
+    liftDeltaTime = .5;
+
+    lcdInit(uart2);
+    lcdSetBacklight(uart2, true);
+    lcdClear(uart2);
+
 
     liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
     rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
     leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
 
-    //liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    //wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     clawMonitorHandle = taskCreate(clawMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    //taskMonitorHandle = taskCreate(taskMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
 
     motorReqMutex =   mutexCreate();
     for(int i = 0; i < 10; i++){
         motorMutexes[i] = mutexCreate();
     }
+
+    runWheelsMutex = mutexCreate();
+    wheelDirMutex = mutexCreate();
+    driveTicksMutex = mutexCreate();
+
+    runLiftMutex = mutexCreate();
+    liftTicksMutex = mutexCreate();
+
+    runFingerMutex = mutexCreate();
+    downPressureMutex = mutexCreate();
+
     autonSelection = programSelected(8);
 }

@@ -32,7 +32,7 @@ extern "C" {
     #define leftQuadPort 7
 
     //Analog Sensors
-    #define gyroPort 1
+    #define gyroPort 5
     #define liftPot 6
     #define potOne 7
     #define potTwo 8
@@ -46,6 +46,9 @@ extern "C" {
     #define MOTOR_DEADBAND 10
 
     #define ANALOG_DEADZONE 10
+
+    #define MID_HEIGHT 1300
+    #define HIGH_HEIGHT 950
 
     int motorSlew[MOTOR_NUM]; //Array containing the slew rates for each individual motor port
     int motorReq[MOTOR_NUM]; //Array containing the requested speed for each indivual motor port (-127 to 127)
@@ -69,11 +72,7 @@ extern "C" {
     //WheelMonitorTask variables
     int wheelTargetTicks;
     enum WheelDirection wheelDir;
-    bool dLeftDirection;
-    bool dRightDirection;
     bool runWheels;
-    bool leftDone;
-    bool rightDone;
     int DRIVEBASE_POWER;
     float TURN_MULTIPLIER;
 
@@ -81,6 +80,19 @@ extern "C" {
     bool runLift;
     int liftTargetTicks;
     int LIFT_POWER;
+
+    bool liftPIDRunning;
+    float liftPGain;
+    float liftIGain;
+    float liftDGain;
+    float liftDerivative;
+    float lastLiftError;
+    int liftError;
+    int liftLastError;
+    int liftCumError;
+    int liftOutput;
+    float liftDeltaTime;
+
 
     //ClawMonitorTask variables
     bool downPressure;
@@ -99,11 +111,22 @@ extern "C" {
     TaskHandle clawMonitorHandle;
     TaskHandle wheelMonitorHandle;
     TaskHandle liftMonitorHandle;
+    TaskHandle liftPIDHandle;
     TaskHandle motorSlewHandle;
     TaskHandle taskMonitorHandle;
 
     Mutex motorReqMutex;
     Mutex motorMutexes[10];
+
+    Mutex runWheelsMutex;
+    Mutex wheelDirMutex;
+    Mutex driveTicksMutex;
+
+    Mutex runLiftMutex;
+    Mutex liftTicksMutex;
+
+    Mutex runFingerMutex;
+    Mutex downPressureMutex;
 
     int programSelected(int segments);
     int clamp(int var, int min, int max);
@@ -124,6 +147,7 @@ extern "C" {
     void stopDrive();
 
     void liftMonitorTask(void *parameter);
+    void liftPID(void *parameter);
     void setSyncLift(int targetTicks);
     void dLift(bool down);
     void stopLift();
