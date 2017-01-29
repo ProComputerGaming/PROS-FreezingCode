@@ -1,15 +1,27 @@
 #include "main.h"
 
 void operatorControl() {
-	autonSelection = programSelected(8);
-	delay(500);
+	mutexTake(runFingerMutex, -1);
+	runFinger = false;
+	mutexGive(runFingerMutex);
 
+	mutexTake(runLiftMutex, -1);
+	runLift = false;
+	mutexGive(runLiftMutex);
+
+	mutexTake(runWheelsMutex, -1);
+	runWheels = false;
+	mutexGive(runWheelsMutex);
+	lcdPrint(uart1, 1, "Auto");
+	autonSelection = programSelected(8);
+
+	int lastTime = millis();
 	while (1) {
 		autonSelection = programSelected(8);
-
-		lcdSetText(uart2, 1, "Auton Selection:");
-		lcdPrint(uart2, 2, "%lu", millis());
-		delay(500);
+		if(millis() - lastTime > 100){
+			lastTime = millis();
+			lcdPrint(uart1, 2, "%d", autonSelection);
+		}
 
 		int liftPotValue = analogRead(liftPot);
 		bool liftTooHigh = liftPotValue < 800;

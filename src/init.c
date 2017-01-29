@@ -6,6 +6,10 @@ void initializeIO() {
 }
 
 void initialize() {
+    lcdInit(uart1);
+    lcdClear(uart1);
+    lcdSetBacklight(uart1, 1);
+
     WHEEL_CIR = PI * 4;
     TOLERANCE = .8;
     FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
@@ -28,28 +32,11 @@ void initialize() {
     wheelDir = FORWARD;
     runWheels = false;
 
-    runLift = false;
+     runLift = false;
 
-    liftPIDRunning = false;
-    liftPGain = .05;
-    liftIGain = .025;
-    liftDGain = .015;
-    liftDerivative = 0;
-    lastLiftError = 0;
-    liftError = 0;
-    liftLastError = 0;
-    liftCumError = 0;
-    liftOutput = 0;
-    liftDeltaTime = .5;
-
-    lcdInit(uart2);
-    lcdSetBacklight(uart2, true);
-    lcdClear(uart2);
-
-
-    liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
-    rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
-    leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
+     liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
+     rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
+     leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
 
     liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
@@ -65,8 +52,8 @@ void initialize() {
     wheelDirMutex = mutexCreate();
     driveTicksMutex = mutexCreate();
 
-    runLiftMutex = mutexCreate();
-    liftTicksMutex = mutexCreate();
+     runLiftMutex = mutexCreate();
+     liftTicksMutex = mutexCreate();
 
     runFingerMutex = mutexCreate();
     downPressureMutex = mutexCreate();

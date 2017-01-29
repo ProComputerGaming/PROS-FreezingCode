@@ -54,6 +54,7 @@ void wheelMonitorTask(void *parameter){
             }
             delay(20);
         }
+        delay(20);
     }
 }
 

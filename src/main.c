@@ -58,8 +58,24 @@ void motorSlewTask(void *parameter){
 }
 
 void waitForTasks(){
-    while(runFinger == true || runWheels == true || runLift == true){
+    bool finger = true;
+    bool lift = true;
+    bool wheels = true;
 
+    while(finger == true || wheels == true || lift == true){
+        mutexTake(runFingerMutex, -1);
+        finger = runFinger;
+        mutexGive(runFingerMutex);
+
+        mutexTake(runLiftMutex, -1);
+        lift = runLift;
+        mutexGive(runLiftMutex);
+
+        mutexTake(runWheelsMutex, -1);
+        wheels = runWheels;
+        mutexGive(runWheelsMutex);
+
+        delay(2);
     }
 }
 

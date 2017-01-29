@@ -47,8 +47,11 @@ extern "C" {
 
     #define ANALOG_DEADZONE 10
 
-    #define MID_HEIGHT 1300
-    #define HIGH_HEIGHT 950
+    #define MID_HEIGHT 1612
+    #define HIGH_HEIGHT 1450
+    #define DOWN_HEIGHT 3100
+
+    //bool initialized;
 
     int motorSlew[MOTOR_NUM]; //Array containing the slew rates for each individual motor port
     int motorReq[MOTOR_NUM]; //Array containing the requested speed for each indivual motor port (-127 to 127)

@@ -10,56 +10,41 @@ void autonZero(){
     waitForTasks();
     setSyncMove(FORWARD, 475);
     waitForTasks();
-    taskDelay(200);
     closeClaw(750);
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     setSyncMove(LEFT, QUARTER);
     waitForTasks();
     setSyncMove(FORWARD, 400);
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     openClaw();
+    setSyncLift(HIGH_HEIGHT - 20);
 }
 
 void autonOne(){
-    //Left Square with Stars
-    setSyncMove(FORWARD, 450);
-    waitForTasks();
-    setSyncMove(RIGHT, QUARTER - 50);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-    setSyncMove(FORWARD, 425);
-    waitForTasks();
-    closeClaw(750);
-    setSyncLift(625);
-    waitForTasks();
-    setSyncMove(LEFT, QUARTER - 75);
-    waitForTasks();
-    setSyncMove(FORWARD, 400);
-    setSyncLift(625);
-    waitForTasks();
-    openClaw();
+    autonZero();
+
     waitForTasks();
     setSyncMove(BACKWARD, 300);
     waitForTasks();
-    setSyncMove(RIGHT, HALF - 100);
+    setSyncMove(RIGHT, HALF + 10);
     waitForTasks();
     setSyncMove(BACKWARD, 75);
-    setSyncLift(50);
+    setSyncLift(DOWN_HEIGHT);
     waitForTasks();
     setSyncMove(FORWARD, 350);
     waitForTasks();
     closeClaw(750);
     setSyncMove(BACKWARD, 100);
     waitForTasks();
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
-    setSyncMove(LEFT, HALF);
+    setSyncMove(LEFT, HALF + 85);
     waitForTasks();
-    setSyncMove(FORWARD, 350);
+    setSyncMove(FORWARD, 400);
     waitForTasks();
+    setSyncMove(FORWARD, 75);
     openClaw();
     waitForTasks();
 }
@@ -74,51 +59,36 @@ void autonTwo(){
     waitForTasks();
     setSyncMove(FORWARD, 475);
     waitForTasks();
-    taskDelay(200);
     closeClaw(750);
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     setSyncMove(RIGHT, QUARTER);
     waitForTasks();
     setSyncMove(FORWARD, 400);
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     openClaw();
+    setSyncLift(HIGH_HEIGHT - 20);
 }
 
 void autonThree(){
     //Right Square with Stars
-    setSyncMove(FORWARD, 425);
-    waitForTasks();
-    setSyncMove(LEFT, QUARTER);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-    setSyncMove(FORWARD, 425);
-    waitForTasks();
-    closeClaw(750);
-    setSyncLift(625);
-    waitForTasks();
-    setSyncMove(RIGHT, QUARTER - 15);
-    waitForTasks();
-    setSyncMove(FORWARD, 400);
-    setSyncLift(625);
-    waitForTasks();
-    openClaw();
+    autonTwo();
+
     waitForTasks();
     setSyncMove(BACKWARD, 300);
     waitForTasks();
     setSyncMove(LEFT, HALF + 50);
     waitForTasks();
     setSyncMove(BACKWARD, 75);
-    setSyncLift(50);
+    setSyncLift(DOWN_HEIGHT);
     waitForTasks();
     setSyncMove(FORWARD, 350);
     waitForTasks();
     closeClaw(750);
     setSyncMove(BACKWARD, 100);
     waitForTasks();
-    setSyncLift(625);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     setSyncMove(RIGHT, HALF + 100);
     waitForTasks();
@@ -129,6 +99,33 @@ void autonThree(){
 }
 
 void autonFour(){
+//Left Anti-Middle
+    setSyncMove(FORWARD, 100);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT + 35);
+    waitForTasks();
+    setSyncMove(FORWARD, 750);
+    waitForTasks();
+    setSyncMove(RIGHT, THREE_QUARTER + 100);
+    waitForTasks();
+    setSyncLift(DOWN_HEIGHT);
+    waitForTasks();
+    setSyncMove(FORWARD, 750);
+    waitForTasks();
+    closeClaw(750);
+    waitForTasks();
+    setSyncMove(BACKWARD, 250);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT);
+    waitForTasks();
+    setSyncMove(LEFT, HALF + 100);
+    waitForTasks();
+    setSyncMove(FORWARD, 700);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
 
 }
 
@@ -262,10 +259,6 @@ void autonFourteen(){
 
 void autonomous() {
     autonSelection = programSelected(8);
-    taskResume(liftMonitorHandle);
-    taskResume(wheelMonitorHandle);
-    taskResume(motorSlewHandle);
-    taskResume(clawMonitorHandle);
     switch(autonSelection){
         case 0:
         autonZero();
@@ -315,8 +308,5 @@ void autonomous() {
         default:
         break;
     }
-    taskSuspend(liftMonitorHandle);
-    taskSuspend(wheelMonitorHandle);
-    taskSuspend(motorSlewHandle);
-    taskSuspend(clawMonitorHandle);
+
 }

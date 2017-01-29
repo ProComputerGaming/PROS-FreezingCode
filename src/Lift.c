@@ -11,81 +11,59 @@ void liftMonitorTask(void *parameter){
         mutexGive(liftTicksMutex);
 
         while(run){
-            LIFT_POWER /= 1.5;
-            while(analogRead(liftPot) < target){
-                dLift(true);
-                delay(20);
+            if(isAutonomous()){
+                int value = analogRead(liftPot);
+                bool needsToLower = (value > target) ? false : true;
+
+                switch(needsToLower){
+                    case true:
+                    while(value < target){
+                        value = analogRead(liftPot);
+                        dLift(needsToLower);
+                        delay(20);
+                    }
+                    stopLift();
+                    run = false;
+                    mutexTake(runLiftMutex, -1);
+                    runLift = false;
+                    mutexGive(runLiftMutex);
+                    break;
+                    case false:
+                    while(value > target){
+                        value = analogRead(liftPot);
+                        dLift(needsToLower);
+                        delay(20);
+                    }
+                    stopLift();
+                    run = false;
+                    mutexTake(runLiftMutex, -1);
+                    runLift = false;
+                    mutexGive(runLiftMutex);
+                    break;
+                }
+            }else{
+                LIFT_POWER /= 1.75;
+                while(analogRead(liftPot) < target){
+                    dLift(true);
+                    delay(20);
+                }
+                stopLift();
+                delay(300);
+                while(analogRead(liftPot) > target){
+                    dLift(false);
+                    delay(20);
+                }
+                stopLift();
+                run = false;
+                mutexTake(runLiftMutex, -1);
+                runLift = false;
+                mutexGive(runLiftMutex);
+
+                LIFT_POWER *= 1.75;
             }
-            stopLift();
-            delay(300);
-            while(analogRead(liftPot) > target){
-                dLift(false);
-                delay(20);
-            }
-            stopLift();
-            run = false;
-            mutexTake(runLiftMutex, -1);
-            runLift = false;
-            mutexGive(runLiftMutex);
-            // bool needsToLower = (value > target) ? false : true;
-            // switch(needsToLower){
-            //     case true:
-            //     while(value < target){
-            //         value = analogRead(liftPot);
-            //         dLift(needsToLower);
-            //         delay(20);
-            //     }
-            //     stopLift();
-            //     run = false;
-            //     break;
-            //     case false:
-            //     while(value > target){
-            //         value = analogRead(liftPot);
-            //         dLift(needsToLower);
-            //         delay(20);
-            //     }
-            //     stopLift();
-            //     run = false;
-            //     break;
-            // }
-            LIFT_POWER *= 1.5;
         }
 
         delay(20);
-    }
-}
-
-void liftPID(void *parameter){
-    liftDerivative = 0;
-    liftError = 0;
-    liftLastError = 0;
-    liftCumError = 0;
-    liftOutput = 0;
-    while(true){
-
-        liftCumError = 0;
-
-        while(liftPIDRunning){
-            int sensorVal = analogRead(liftPot);
-
-            mutexTake(liftTicksMutex, -1);
-            int setPoint = liftTargetTicks;
-            mutexGive(liftTicksMutex);
-
-            liftError = setPoint - sensorVal;
-            liftCumError += liftError;
-            liftDerivative = (liftError - lastLiftError)/(liftDeltaTime);
-            lastLiftError = liftError;
-            liftOutput = -clamp(((liftPGain * liftError) + (liftIGain * liftCumError) + (liftDGain* liftDerivative)), MOTOR_MIN_VALUE, MOTOR_MAX_VALUE);
-
-            mutexTake(motorReqMutex, -1);
-            motorReq[upperLift - 1] = -liftOutput;
-            motorReq[lowerRightLift - 1] = -liftOutput;
-            motorReq[lowerLeftLift - 1] = liftOutput;
-            mutexGive(motorReqMutex);
-
-            delay(liftDeltaTime * 1000);
-        }
     }
 }
 

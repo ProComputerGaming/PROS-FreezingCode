@@ -45,6 +45,7 @@ void clawMonitorTask(void *parameter){
 
 void closeClaw(int millis){
     if(millis != 0){
+        taskSuspend(clawMonitorHandle);
         mutexTake(motorMutexes[fingerY - 1], -1);
         motorSet(fingerY, CLAW_POWER);
         mutexGive(motorMutexes[fingerY - 1]);
@@ -58,6 +59,8 @@ void closeClaw(int millis){
         mutexTake(motorMutexes[fingerY - 1], -1);
         motorStop(fingerY);
         mutexGive(motorMutexes[fingerY - 1]);
+        taskResume(clawMonitorHandle);
+
     }else{
         mutexTake(motorMutexes[fingerY - 1], -1);
         motorSet(fingerY, CLAW_POWER);
