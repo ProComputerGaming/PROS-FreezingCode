@@ -20,11 +20,12 @@ void operatorControl() {
 		autonSelection = programSelected(8);
 		if(millis() - lastTime > 100){
 			lastTime = millis();
-			lcdPrint(uart1, 2, "%d", autonSelection);
+			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
+			lcdPrint(uart1, 2, "     %d     ", (gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2);
 		}
 
 		int liftPotValue = analogRead(liftPot);
-		bool liftTooHigh = liftPotValue < 800;
+		bool liftTooHigh = liftPotValue < 900;
 		bool liftTooLow = liftPotValue > 3100;
 
 		if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){

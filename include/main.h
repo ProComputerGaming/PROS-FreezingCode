@@ -32,7 +32,8 @@ extern "C" {
     #define leftQuadPort 7
 
     //Analog Sensors
-    #define gyroPort 5
+    #define gyroOnePort 5
+    #define gyroTwoPort 4
     #define liftPot 6
     #define potOne 7
     #define potTwo 8
@@ -110,6 +111,8 @@ extern "C" {
     Encoder liftQuad;
     Encoder rightQuad;
     Encoder leftQuad;
+    Gyro gyroOne;
+    Gyro gyroTwo;
 
     TaskHandle clawMonitorHandle;
     TaskHandle wheelMonitorHandle;

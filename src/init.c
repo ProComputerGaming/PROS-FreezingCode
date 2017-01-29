@@ -10,6 +10,9 @@ void initialize() {
     lcdClear(uart1);
     lcdSetBacklight(uart1, 1);
 
+    gyroOne = gyroInit(gyroOnePort, 250);
+    gyroTwo = gyroInit(gyroTwoPort, 0);
+
     WHEEL_CIR = PI * 4;
     TOLERANCE = .8;
     FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
