@@ -35,11 +35,13 @@ void initialize() {
     wheelDir = FORWARD;
     runWheels = false;
 
-     runLift = false;
+    runLift = false;
 
-     liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
-     rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
-     leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
+    useGyro = false;
+
+    liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
+    rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
+    leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
 
     liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
@@ -55,11 +57,13 @@ void initialize() {
     wheelDirMutex = mutexCreate();
     driveTicksMutex = mutexCreate();
 
-     runLiftMutex = mutexCreate();
-     liftTicksMutex = mutexCreate();
+    runLiftMutex = mutexCreate();
+    liftTicksMutex = mutexCreate();
 
     runFingerMutex = mutexCreate();
     downPressureMutex = mutexCreate();
+
+    useGyroMutex = mutexCreate();
 
     autonSelection = programSelected(8);
 }

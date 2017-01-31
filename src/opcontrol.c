@@ -21,7 +21,7 @@ void operatorControl() {
 		if(millis() - lastTime > 100){
 			lastTime = millis();
 			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
-			lcdPrint(uart1, 2, "     %d     ", (gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2);
+			lcdPrint(uart1, 2, "%d, %d", (gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2, autonSelection);
 		}
 
 		int liftPotValue = analogRead(liftPot);
@@ -45,6 +45,12 @@ void operatorControl() {
 			closeClaw(OFF);
 		}else if(joystickGetDigital(1, 5, JOY_UP)){
 			openClaw();
+		}
+
+		if(joystickGetDigital(1, 7, JOY_UP)){
+			gyroReset(gyroOne);
+			gyroReset(gyroTwo);
+			delay(500);
 		}
 
 		analogDrive();

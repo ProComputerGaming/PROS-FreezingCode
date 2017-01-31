@@ -49,7 +49,7 @@ extern "C" {
     #define ANALOG_DEADZONE 10
 
     #define MID_HEIGHT 1612
-    #define HIGH_HEIGHT 1450
+    #define HIGH_HEIGHT 1350
     #define DOWN_HEIGHT 3100
 
     //bool initialized;
@@ -107,6 +107,8 @@ extern "C" {
     //Index of the autonomous routine to run based on the two potentiometers mounted on the back of the robot
     int autonSelection;
 
+    bool useGyro;
+
     //Quadrature Encoders
     Encoder liftQuad;
     Encoder rightQuad;
@@ -134,6 +136,8 @@ extern "C" {
     Mutex runFingerMutex;
     Mutex downPressureMutex;
 
+    Mutex useGyroMutex;
+
     int programSelected(int segments);
     int clamp(int var, int min, int max);
 
@@ -142,7 +146,7 @@ extern "C" {
     void stopAllMotors();
 
     void wheelMonitorTask(void *parameter);
-    void setSyncMove(enum WheelDirection d,int targetTicks);
+    void setSyncMove(enum WheelDirection d,int targetTicks, bool useGyroOverEncoder);
     void dLeft(bool backwards, bool bypassSlew);
     void dRight(bool backwards, bool bypassSlew);
     void strafeRight(int millis);

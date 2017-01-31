@@ -6,7 +6,8 @@ void wheelMonitorTask(void *parameter){
         bool dRightDirection = false;
         bool leftDone = false;
         bool rightDone = false;
-
+        bool gyroStepOne = false;
+        bool gyroStepTwo = false;
         mutexTake(runWheelsMutex, -1);
         bool run = runWheels;
         mutexGive(runWheelsMutex);
@@ -19,59 +20,114 @@ void wheelMonitorTask(void *parameter){
         enum WheelDirection d = wheelDir;
         mutexGive(wheelDirMutex);
 
-        while(run){
-            if(abs(encoderGet(leftQuad)) < target){
-                switch(d){
-                    case FORWARD: dLeftDirection = false; break;
-                    case BACKWARD: dLeftDirection = true; break;
-                    case LEFT: dLeftDirection = true; break;
-                    case RIGHT: dLeftDirection = false; break;
-                }
-                dLeft(dLeftDirection, false);
-            }else{
-                leftDone = true;
-                stopLeft();
-            }
-            if(abs(encoderGet(rightQuad)) < target){
-                switch(d){
-                    case FORWARD: dRightDirection = false; break;
-                    case BACKWARD: dRightDirection = true; break;
-                    case LEFT: dRightDirection = false; break;
-                    case RIGHT: dRightDirection = true; break;
-                }
-                dRight(dRightDirection, false);
-            }else{
-                rightDone = true;
-                stopRight();
-            }
-            if(leftDone && rightDone){
-                run = false;
+        mutexTake(useGyroMutex, -1);
+        bool gyro = useGyro;
+        mutexGive(useGyroMutex);
 
-                mutexTake(runWheelsMutex, -1);
-                runWheels = false;
-                mutexGive(runWheelsMutex);
-                stopDrive();
+        while(run){
+
+            int gyroAverage = abs((gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2);
+            if(gyro){
+                if(!gyroStepOne){
+                    lcdSetText(uart1, 2, "GyroStepTwo");
+                    if(gyroAverage < target - (target * .6)){
+                        dLeft(false, false);
+                        dRight(true, false);
+                    }else if(gyroAverage > target + (target * .6)){
+                        dLeft(true, false);
+                        dRight(false, false);
+                    }else{
+                        gyroStepOne = true;
+                    }
+                }else if(!gyroStepTwo){
+                    lcdSetText(uart1, 2, "GyroStepTwo");
+                    DRIVEBASE_POWER /= 2;
+                    if(gyroAverage < target){
+                        dLeft(false, false);
+                        dRight(true, false);
+                    }else if(gyroAverage > target){
+                        dLeft(true, false);
+                        dRight(false, false);
+                    }else{
+                        gyroStepTwo = true;
+                    }
+                    DRIVEBASE_POWER *= 2;
+                }else{
+
+                    leftDone = true;
+                    rightDone = true;
+                    stopDrive();
+                }
+
+                if(leftDone && rightDone){
+                    run = false;
+
+                    mutexTake(runWheelsMutex, -1);
+                    runWheels = false;
+                    mutexGive(runWheelsMutex);
+                    stopDrive();
+                }
+            }else{
+                if(abs(encoderGet(leftQuad)) < target){
+                    switch(d){
+                        case FORWARD: dLeftDirection = false; break;
+                        case BACKWARD: dLeftDirection = true; break;
+                        case LEFT: dLeftDirection = true; break;
+                        case RIGHT: dLeftDirection = false; break;
+                    }
+                    dLeft(dLeftDirection, false);
+                }else{
+                    leftDone = true;
+                    stopLeft();
+                }
+
+                if(abs(encoderGet(rightQuad)) < target){
+                    switch(d){
+                        case FORWARD: dRightDirection = false; break;
+                        case BACKWARD: dRightDirection = true; break;
+                        case LEFT: dRightDirection = false; break;
+                        case RIGHT: dRightDirection = true; break;
+                    }
+                    dRight(dRightDirection, false);
+                }else{
+                    rightDone = true;
+                    stopRight();
+                }
+
+                if(leftDone && rightDone){
+                    run = false;
+
+                    mutexTake(runWheelsMutex, -1);
+                    runWheels = false;
+                    mutexGive(runWheelsMutex);
+                    stopDrive();
+                }
             }
+
             delay(20);
         }
         delay(20);
     }
 }
 
-void setSyncMove(enum WheelDirection d, int targetTicks){
+void setSyncMove(enum WheelDirection d, int targetTicks, bool useGyroOverEncoder){
     mutexTake(driveTicksMutex, -1);
-   wheelTargetTicks = targetTicks;
-   mutexGive(driveTicksMutex);
+    wheelTargetTicks = targetTicks;
+    mutexGive(driveTicksMutex);
 
-   mutexTake(wheelDirMutex, -1);
-   wheelDir = d;
-   mutexGive(wheelDirMutex);
+    mutexTake(wheelDirMutex, -1);
+    wheelDir = d;
+    mutexGive(wheelDirMutex);
 
-   zeroDriveSensors();
+    zeroDriveSensors();
 
-   mutexTake(runWheelsMutex, -1);
-   runWheels = true;
-   mutexGive(runWheelsMutex);
+    mutexTake(runWheelsMutex, -1);
+    runWheels = true;
+    mutexGive(runWheelsMutex);
+
+    mutexTake(useGyroMutex, -1);
+    useGyro = useGyroOverEncoder;
+    mutexGive(useGyroMutex);
 }
 
 void dLeft(bool backwards, bool bypassSlew){
