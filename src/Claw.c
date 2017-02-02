@@ -37,9 +37,9 @@ void clawMonitorTask(void *parameter){
                  mutexGive(runFingerMutex);
 
              }
-             delay(10);
+             delay(20);
          }
-        delay(10);
+        delay(20);
     }
 }
 
@@ -67,6 +67,10 @@ void closeClaw(int millis){
     mutexTake(downPressureMutex, -1);
     downPressure = true;
     mutexGive(downPressureMutex);
+
+    mutexTake(runFingerMutex, -1);
+    runFinger = false;
+    mutexGive(runFingerMutex);
 }
 
 void openClaw(){

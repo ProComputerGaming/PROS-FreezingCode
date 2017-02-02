@@ -8,6 +8,7 @@ void wheelMonitorTask(void *parameter){
         bool rightDone = false;
         bool gyroStepOne = false;
         bool gyroStepTwo = false;
+        int targetOffset = 0;
         mutexTake(runWheelsMutex, -1);
         bool run = runWheels;
         mutexGive(runWheelsMutex);
@@ -25,29 +26,33 @@ void wheelMonitorTask(void *parameter){
         mutexGive(useGyroMutex);
 
         while(run){
+            mutexTake(runWheelsMutex, -1);
+            run = runWheels;
+            mutexGive(runWheelsMutex);
 
-            int gyroAverage = abs((gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2);
+            int gyroAverage = (gyroGet(gyroOne) + gyroGet(gyroTwo)) / 2;
             if(gyro){
-                if(!gyroStepOne){
-                    lcdSetText(uart1, 2, "GyroStepTwo");
-                    if(gyroAverage < target - (target * .6)){
-                        dLeft(false, false);
-                        dRight(true, false);
-                    }else if(gyroAverage > target + (target * .6)){
+                if((!leftDone || !rightDone) && !gyroStepOne){
+                    targetOffset =  abs(target) < 45 ? 30 : abs(target * .6);
+                    if(gyroAverage < target - (targetOffset)){
                         dLeft(true, false);
                         dRight(false, false);
+                    }else if(gyroAverage > target + (targetOffset)){
+                        dLeft(false, false);
+                        dRight(true, false);
                     }else{
                         gyroStepOne = true;
+                        stopDrive();
+                        delay(400);
                     }
-                }else if(!gyroStepTwo){
-                    lcdSetText(uart1, 2, "GyroStepTwo");
+                }else if((!leftDone || !rightDone) && !gyroStepTwo){
                     DRIVEBASE_POWER /= 2;
                     if(gyroAverage < target){
-                        dLeft(false, false);
-                        dRight(true, false);
-                    }else if(gyroAverage > target){
                         dLeft(true, false);
                         dRight(false, false);
+                    }else if(gyroAverage > target){
+                        dLeft(false, false);
+                        dRight(true, false);
                     }else{
                         gyroStepTwo = true;
                     }
@@ -102,6 +107,14 @@ void wheelMonitorTask(void *parameter){
                     mutexGive(runWheelsMutex);
                     stopDrive();
                 }
+            }
+            if(leftDone && rightDone){
+                run = false;
+
+                mutexTake(runWheelsMutex, -1);
+                runWheels = false;
+                mutexGive(runWheelsMutex);
+                stopDrive();
             }
 
             delay(20);

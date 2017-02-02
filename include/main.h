@@ -49,8 +49,8 @@ extern "C" {
     #define ANALOG_DEADZONE 10
 
     #define MID_HEIGHT 1612
-    #define HIGH_HEIGHT 1350
-    #define DOWN_HEIGHT 3100
+    #define HIGH_HEIGHT 650
+    #define DOWN_HEIGHT 20
 
     //bool initialized;
 

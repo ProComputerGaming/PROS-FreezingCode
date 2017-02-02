@@ -11,56 +11,30 @@ void liftMonitorTask(void *parameter){
         mutexGive(liftTicksMutex);
 
         while(run){
-            if(isAutonomous()){
-                int value = analogRead(liftPot);
-                bool needsToLower = (value > target) ? false : true;
-
-                switch(needsToLower){
-                    case true:
-                    while(value < target){
-                        value = analogRead(liftPot);
+            bool needsToLower = (abs(encoderGet(liftQuad)) > target) ? true : false;
+            switch(needsToLower){
+                case true:
+                    while(abs(encoderGet(liftQuad)) > target){
                         dLift(needsToLower);
                         delay(20);
                     }
                     stopLift();
                     run = false;
-                    mutexTake(runLiftMutex, -1);
-                    runLift = false;
-                    mutexGive(runLiftMutex);
                     break;
-                    case false:
-                    while(value > target){
-                        value = analogRead(liftPot);
+                case false:
+                    while(abs(encoderGet(liftQuad)) < target){
                         dLift(needsToLower);
                         delay(20);
                     }
                     stopLift();
                     run = false;
-                    mutexTake(runLiftMutex, -1);
-                    runLift = false;
-                    mutexGive(runLiftMutex);
                     break;
-                }
-            }else{
-                LIFT_POWER /= 1.75;
-                while(analogRead(liftPot) < target){
-                    dLift(true);
-                    delay(20);
-                }
-                stopLift();
-                delay(300);
-                while(analogRead(liftPot) > target){
-                    dLift(false);
-                    delay(20);
-                }
-                stopLift();
-                run = false;
-                mutexTake(runLiftMutex, -1);
-                runLift = false;
-                mutexGive(runLiftMutex);
-
-                LIFT_POWER *= 1.75;
             }
+
+            mutexTake(runLiftMutex, -1);
+            runLift = false;
+            mutexGive(runLiftMutex);
+
         }
 
         delay(20);
