@@ -48,7 +48,7 @@ extern "C" {
 
     #define ANALOG_DEADZONE 10
 
-    #define MID_HEIGHT 1612
+    #define MID_HEIGHT 600
     #define HIGH_HEIGHT 650
     #define DOWN_HEIGHT 20
 

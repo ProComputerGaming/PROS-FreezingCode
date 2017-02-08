@@ -11,12 +11,13 @@ void autonZero(){
     setSyncMove(FORWARD, 475, false);
     waitForTasks();
     closeClaw(750);
+    delay(750);
     setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     setSyncMove(LEFT, QUARTER, false);
     waitForTasks();
     setSyncMove(FORWARD, 400, false);
-    setSyncLift(HIGH_HEIGHT);
+    setSyncLift(HIGH_HEIGHT + 40);
     waitForTasks();
     openClaw();
     setSyncLift(HIGH_HEIGHT - 20);
@@ -36,6 +37,7 @@ void autonOne(){
     setSyncMove(FORWARD, 350, false);
     waitForTasks();
     closeClaw(750);
+    delay(750);
     setSyncMove(BACKWARD, 100, false);
     waitForTasks();
     setSyncLift(HIGH_HEIGHT);
@@ -115,6 +117,7 @@ void autonFour(){
     setSyncMove(FORWARD, 750, false);
     waitForTasks();
     closeClaw(750);
+    delay(750);
     waitForTasks();
     setSyncMove(BACKWARD, 250, false);
     waitForTasks();
@@ -130,7 +133,16 @@ void autonFour(){
 }
 
 void autonFive(){
-
+    //Left Anti-Middle
+        setSyncMove(FORWARD, 100, false);
+        waitForTasks();
+        openClaw();
+        waitForTasks();
+        setSyncLift(HIGH_HEIGHT + 35);
+        waitForTasks();
+        setSyncMove(FORWARD, 750, false);
+        waitForTasks();
+        
 }
 
 void autonSix(){
@@ -162,119 +174,6 @@ void autonTwelve(){
 }
 
 void autonThirteen(){
-    setSyncMove(FORWARD, 100, false);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-    delay(200);
-    setSyncLift(HIGH_HEIGHT);
-    waitForTasks();
-    setSyncMove(BACKWARD, 100, false);
-    waitForTasks();
-    delay(1500);
-    closeClaw(750);
-    delay(1500);
-    setSyncMove(FORWARD, 950, false);
-    waitForTasks();
-    openClaw(); //Drop 3 star and cube combo
-    waitForTasks();
-
-    setSyncMove(BACKWARD, 950, false);
-    waitForTasks();
-    delay(1000);
-    closeClaw(750);
-    delay(1000);
-    setSyncMove(FORWARD, 950, false);
-    waitForTasks();
-    openClaw();
-    waitForTasks(); //Drop the one cube preload
-
-    setSyncMove(BACKWARD, 1100, false);
-    waitForTasks();
-    gyroReset(gyroOne);
-    gyroReset(gyroTwo);
-    delay(1500);
-    setSyncMove(FORWARD,450, false);
-    waitForTasks();
-    delay(400);
-    setSyncMove(RIGHT, -90, true);
-    waitForTasks();
-    setSyncLift(DOWN_HEIGHT);
-    waitForTasks();
-    setSyncMove(FORWARD, 500, false);
-    waitForTasks();
-    closeClaw(1000);
-    delay(750);
-    waitForTasks();
-    setSyncLift(HIGH_HEIGHT);
-    waitForTasks();
-    setSyncMove(FORWARD, 500, false);
-    waitForTasks();
-    setSyncMove(LEFT, 0, true);
-    waitForTasks();
-    setSyncLift(HIGH_HEIGHT + 20);
-    waitForTasks();
-    setSyncMove(FORWARD, 500, false);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-
-
-    setSyncMove(BACKWARD, 500, false);
-    waitForTasks();
-    setSyncMove(RIGHT, -165, true);
-    waitForTasks();
-    setSyncMove(BACKWARD, 200, false);
-    waitForTasks();
-    setSyncLift(DOWN_HEIGHT);
-    waitForTasks();
-    setSyncMove(FORWARD, 600, false);
-    waitForTasks();
-    closeClaw(1000);
-    delay(750);
-    setSyncMove(BACKWARD, 400, false);
-    waitForTasks();
-    setSyncLift(HIGH_HEIGHT + 30);
-    waitForTasks();
-    setSyncMove(LEFT, 0, true);
-    waitForTasks();
-    setSyncMove(BACKWARD, 900, false);
-    waitForTasks();
-    gyroReset(gyroOne);
-    gyroReset(gyroTwo);
-    delay(1200);
-    setSyncLift(DOWN_HEIGHT);
-    waitForTasks();
-    setSyncLift(HIGH_HEIGHT + 60);
-    waitForTasks();
-    setSyncMove(FORWARD, 1000, false);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-
-    setSyncMove(BACKWARD, 200, false);
-    waitForTasks();
-    setSyncMove(LEFT, 150, true);
-    waitForTasks();
-    setSyncLift(DOWN_HEIGHT);
-    waitForTasks();
-    setSyncMove(FORWARD, 350, false);
-    waitForTasks();
-    closeClaw(1000);
-    delay(1000);
-    setSyncMove(BACKWARD, 400, false);
-    waitForTasks();
-    setSyncLift(HIGH_HEIGHT + 20);
-    waitForTasks();
-    setSyncMove(RIGHT, 0, true);
-    waitForTasks();
-    setSyncMove(FORWARD, 700, false);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
-}
-
-void autonFourteen(){
     setSyncMove(FORWARD, 100, false);
     waitForTasks();
     openClaw();
@@ -364,6 +263,114 @@ void autonFourteen(){
     waitForTasks();
     openClaw();
     waitForTasks(); //Drop fence stars
+}
+
+void autonFourteen(){
+    setSyncMove(FORWARD, 100, false);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
+    delay(200);
+    setSyncLift(HIGH_HEIGHT);
+    waitForTasks();
+    setSyncMove(BACKWARD, 100, false);
+    waitForTasks();
+    delay(1500);
+    closeClaw(750);
+    delay(1500);
+    setSyncMove(FORWARD, 950, false);
+    waitForTasks();
+    openClaw(); //Drop 3 star and cube combo
+    waitForTasks();
+
+    setSyncMove(BACKWARD, 950, false);
+    waitForTasks();
+    delay(1000);
+    closeClaw(750);
+    delay(1000);
+    setSyncMove(FORWARD, 950, false);
+    waitForTasks();
+    openClaw();
+    waitForTasks(); //Drop the one cube preload
+
+    setSyncMove(BACKWARD, 1100, false);
+    waitForTasks();
+    gyroReset(gyroOne);
+    gyroReset(gyroTwo);
+    delay(1500);
+    setSyncMove(FORWARD,450, false);
+    waitForTasks();
+    delay(400);
+    setSyncMove(RIGHT, -90, true);
+    waitForTasks();
+    setSyncLift(DOWN_HEIGHT);
+    waitForTasks();
+    setSyncMove(FORWARD, 500, false);
+    waitForTasks();
+    closeClaw(1000);
+    delay(750);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT);
+    waitForTasks();
+    setSyncMove(FORWARD, 500, false);
+    waitForTasks();
+    setSyncMove(LEFT, 0, true);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT + 20);
+    waitForTasks();
+    setSyncMove(FORWARD, 500, false);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
+
+
+    setSyncMove(BACKWARD, 500, false);
+    waitForTasks();
+    setSyncMove(RIGHT, -160, true);
+    waitForTasks();
+    setSyncMove(BACKWARD, 200, false);
+    waitForTasks();
+    setSyncLift(DOWN_HEIGHT);
+    waitForTasks();
+    setSyncMove(FORWARD, 600, false);
+    waitForTasks();
+    closeClaw(1000);
+    delay(1000);
+    setSyncMove(BACKWARD, 400, false);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT + 30);
+    waitForTasks();
+    setSyncMove(LEFT, 0, true);
+    waitForTasks();
+    setSyncLift(DOWN_HEIGHT);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT + 60);
+    waitForTasks();
+    setSyncMove(FORWARD, 1000, false);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
+
+    setSyncMove(BACKWARD, 200, false);
+    waitForTasks();
+    setSyncMove(LEFT, 150, true);
+    waitForTasks();
+    setSyncLift(DOWN_HEIGHT);
+    waitForTasks();
+    setSyncMove(FORWARD, 350, false);
+    waitForTasks();
+    closeClaw(1000);
+    delay(1000);
+    setSyncMove(BACKWARD, 400, false);
+    waitForTasks();
+    setSyncLift(HIGH_HEIGHT + 20);
+    waitForTasks();
+    setSyncMove(RIGHT, 0, true);
+    waitForTasks();
+    setSyncMove(FORWARD, 700, false);
+    waitForTasks();
+    openClaw();
+    waitForTasks();
 }
 
 void autonomous() {
