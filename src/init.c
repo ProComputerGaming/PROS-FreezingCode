@@ -31,6 +31,7 @@ void initialize() {
     downPressure = false;
     runFinger = false;
     fingerNeedsToOpen = false;
+    clawClosing = false;
 
     wheelDir = FORWARD;
     runWheels = false;
@@ -62,6 +63,7 @@ void initialize() {
 
     runFingerMutex = mutexCreate();
     downPressureMutex = mutexCreate();
+    clawClosingMutex = mutexCreate();
 
     useGyroMutex = mutexCreate();
 

@@ -18,15 +18,15 @@ void operatorControl() {
 	int lastTime = millis();
 	while (1) {
 		autonSelection = programSelected(8);
-		if(millis() - lastTime > 100){
+		if(millis() - lastTime > 1000){
 			lastTime = millis();
 			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
 			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, autonSelection);
 		}
 
 		int liftPotValue = analogRead(liftPot);
-		bool liftTooHigh = liftPotValue < 900;
-		bool liftTooLow = liftPotValue > 3100;
+		bool liftTooLow = liftPotValue < 825;
+		bool liftTooHigh = liftPotValue > 3100;
 
 		if(joystickGetDigital(1, 6, JOY_UP) && !liftTooHigh){
 			dLift(false);
@@ -45,6 +45,10 @@ void operatorControl() {
 			closeClaw(OFF);
 		}else if(joystickGetDigital(1, 5, JOY_UP)){
 			openClaw();
+		}else{
+			mutexTake(clawClosingMutex, -1);
+			clawClosing = false;
+			mutexGive(clawClosingMutex);
 		}
 
 		if(joystickGetDigital(1, 7, JOY_UP)){

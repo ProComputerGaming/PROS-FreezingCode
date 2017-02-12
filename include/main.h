@@ -102,6 +102,7 @@ extern "C" {
     bool downPressure;
     bool runFinger;
     bool fingerNeedsToOpen;
+    bool clawClosing;
     int CLAW_POWER;
 
     //Index of the autonomous routine to run based on the two potentiometers mounted on the back of the robot
@@ -135,6 +136,7 @@ extern "C" {
 
     Mutex runFingerMutex;
     Mutex downPressureMutex;
+    Mutex clawClosingMutex;
 
     Mutex useGyroMutex;
 
