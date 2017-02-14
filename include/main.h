@@ -148,7 +148,7 @@ extern "C" {
     void stopAllMotors();
 
     void wheelMonitorTask(void *parameter);
-    void setSyncMove(enum WheelDirection d,int targetTicks, bool useGyroOverEncoder);
+    void setSyncMove(enum WheelDirection d,int targetTicks, bool enableGyro);
     void dLeft(bool backwards, bool bypassSlew);
     void dRight(bool backwards, bool bypassSlew);
     void strafeRight(int millis);

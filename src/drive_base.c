@@ -123,7 +123,7 @@ void wheelMonitorTask(void *parameter){
     }
 }
 
-void setSyncMove(enum WheelDirection d, int targetTicks, bool useGyroOverEncoder){
+void setSyncMove(enum WheelDirection d, int targetTicks, bool enableGyro){
     mutexTake(driveTicksMutex, -1);
     wheelTargetTicks = targetTicks;
     mutexGive(driveTicksMutex);
@@ -139,7 +139,7 @@ void setSyncMove(enum WheelDirection d, int targetTicks, bool useGyroOverEncoder
     mutexGive(runWheelsMutex);
 
     mutexTake(useGyroMutex, -1);
-    useGyro = useGyroOverEncoder;
+    useGyro = enableGyro;
     mutexGive(useGyroMutex);
 }
 
