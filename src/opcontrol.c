@@ -16,12 +16,18 @@ void operatorControl() {
 	autonSelection = programSelected(8);
 
 	int lastTime = millis();
+	int lastTimeTwo = millis();
 	while (1) {
 		autonSelection = programSelected(8);
-		if(millis() - lastTime > 1000){
+		if(millis() - lastTime > 100){
 			lastTime = millis();
 			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
 			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, autonSelection);
+		}
+
+		if(millis() - lastTimeTwo > 400){
+			lastTimeTwo = millis();
+			printf("Lift Quad: %d\n", abs(encoderGet(liftQuad)));
 		}
 
 		int liftPotValue = analogRead(liftPot);

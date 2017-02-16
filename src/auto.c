@@ -2,48 +2,55 @@
 
 void autonZero(){
     //Left
+    DRIVEBASE_POWER = 127;
     setSyncMove(FORWARD, 400, false);
     waitForTasks();
+    DRIVEBASE_POWER = 63;
     setSyncMove(RIGHT, QUARTER, false);
     waitForTasks();
     openClaw();
     waitForTasks();
-    setSyncMove(FORWARD, 475, false);
+    DRIVEBASE_POWER = 127;
+    setSyncMove(FORWARD, 430, false);
     waitForTasks();
-    closeClaw(750);
-    delay(750);
-    setSyncLift(HIGH_HEIGHT);
+    closeClaw(300);
+    setSyncLift(HIGH_HEIGHT - 110);
     waitForTasks();
+    DRIVEBASE_POWER = 63;
     setSyncMove(LEFT, QUARTER, false);
     waitForTasks();
-    setSyncMove(FORWARD, 400, false);
-    setSyncLift(HIGH_HEIGHT + 40);
+    DRIVEBASE_POWER = 63;
+    setSyncMove(FORWARD, 475, false);
     waitForTasks();
     openClaw();
-    setSyncLift(HIGH_HEIGHT - 20);
+    setSyncLift(HIGH_HEIGHT + 40);
 }
 
 void autonOne(){
     autonZero();
 
     waitForTasks();
+    DRIVEBASE_POWER = 127;
     setSyncMove(BACKWARD, 300, false);
     waitForTasks();
-    setSyncMove(RIGHT, HALF + 10, false);
+    DRIVEBASE_POWER = 63;
+    setSyncMove(RIGHT, HALF + 60, false);
     waitForTasks();
+    DRIVEBASE_POWER = 127;
     setSyncMove(BACKWARD, 75, false);
     setSyncLift(DOWN_HEIGHT);
     waitForTasks();
     setSyncMove(FORWARD, 350, false);
     waitForTasks();
-    closeClaw(750);
-    delay(750);
+    closeClaw(500);
     setSyncMove(BACKWARD, 100, false);
     waitForTasks();
     setSyncLift(HIGH_HEIGHT);
     waitForTasks();
-    setSyncMove(LEFT, HALF + 85, false);
+    DRIVEBASE_POWER = 63;
+    setSyncMove(LEFT, HALF, false);
     waitForTasks();
+    DRIVEBASE_POWER = 127;
     setSyncMove(FORWARD, 400, false);
     waitForTasks();
     setSyncMove(FORWARD, 75, false);
@@ -142,7 +149,7 @@ void autonFive(){
         waitForTasks();
         setSyncMove(FORWARD, 750, false);
         waitForTasks();
-        
+
 }
 
 void autonSix(){
