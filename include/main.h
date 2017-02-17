@@ -41,7 +41,7 @@ extern "C" {
     #define MOTOR_NUM 10
     #define MOTOR_MAX_VALUE 127
     #define MOTOR_MIN_VALUE -127
-    #define MOTOR_DEFAULT_SLEW_RATE 20
+    #define MOTOR_DEFAULT_SLEW_RATE 40
     #define MOTOR_FAST_SLEW_RATE 256
     #define MOTOR_TASK_DELAY 20
     #define MOTOR_DEADBAND 10
@@ -103,6 +103,7 @@ extern "C" {
     bool runFinger;
     bool fingerNeedsToOpen;
     bool clawClosing;
+    bool clawDown;
     int CLAW_POWER;
 
     //Index of the autonomous routine to run based on the two potentiometers mounted on the back of the robot

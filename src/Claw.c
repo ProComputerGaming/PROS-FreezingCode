@@ -14,7 +14,7 @@ void clawMonitorTask(void *parameter){
         bool closing = clawClosing;
         mutexGive(clawClosingMutex);
 
-        bool open = (digitalRead(leftFingerSwitchPort) == 1 || digitalRead(rightFingerSwitchPort) == 1);
+        bool open = false;
 
         if(closing == false){
             if(down == true && run == false){
@@ -30,7 +30,7 @@ void clawMonitorTask(void *parameter){
             }
         }
 
-        while(run && open){
+        while(run && (open || clawDown == false)){
             mutexTake(motorMutexes[fingerY - 1], 100);
             motorSet(fingerY, -127);
             mutexGive(motorMutexes[fingerY - 1]);
@@ -41,7 +41,7 @@ void clawMonitorTask(void *parameter){
                 mutexTake(runFingerMutex, 100);
                 runFinger = false;
                 mutexGive(runFingerMutex);
-
+                clawDown = true;
             }
             taskDelay(20);
         }
@@ -85,6 +85,7 @@ void closeClaw(int millis){
 }
 
 void openClaw(){
+
     mutexTake(clawClosingMutex, 100);
     clawClosing = false;
     mutexGive(clawClosingMutex);

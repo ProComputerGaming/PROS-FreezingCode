@@ -31,6 +31,7 @@ void initialize() {
     downPressure = false;
     runFinger = false;
     fingerNeedsToOpen = false;
+    clawDown = false;
     clawClosing = false;
 
     wheelDir = FORWARD;
