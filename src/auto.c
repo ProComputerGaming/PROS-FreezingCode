@@ -162,14 +162,15 @@ void autonFive(){
 }
 
 void autonSix(){
-    closeClaw(400);
+    closeClaw(200);
     waitForTasks();
-    openClaw();
-    waitForTasks();
-    closeClaw(400);
-    waitForTasks();
-    openClaw();
-    waitForTasks();
+    delay(4000);
+    // openClaw();
+    // waitForTasks();
+    // closeClaw(400);
+    // waitForTasks();
+    // openClaw();
+    // waitForTasks();
 }
 
 void autonSeven(){
