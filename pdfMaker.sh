@@ -44,4 +44,7 @@ then
 	else
 		echo "'src' directory not found. PDFs of source files won't be created"
 	fi
+	
+else
+	echo "'project.pros' file not found. Are you sure this is the root directory of your project?"
 fi
