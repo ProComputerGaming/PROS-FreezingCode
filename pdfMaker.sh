@@ -26,8 +26,14 @@ then
 		do
 			echo "Making PDF of $i"
 			q=$(basename $i .h)
-			a2ps --user-option=lp --borders=no --pretty-print=gnuc --landscape $i | ps2pdf - PDFs/include/$q.pdf
+			#a2ps --user-option=lp --borders=no --pretty-print=gnuc --landscape $i | ps2pdf - PDFs/include/$q.pdf
+			pdflatex -shell-escape LATEX/include/"$q".tex
 		done
+
+		rm *.log
+		rm *.aux
+		rm -r _minted*
+		mv *.pdf PDFs/include/
 	else
 		echo "'include' directory not found. PDFs of header files won't be created"
 	fi
@@ -39,8 +45,13 @@ then
 		do
 			echo "Making PDF of $i"
 			q=$(basename $i .c)
-			a2ps --user-option=lp --borders=no --pretty-print=gnuc --landscape $i | ps2pdf - PDFs/src/$q.pdf
+			pdflatex -shell-escape LATEX/src/"$q".tex
 		done
+
+		rm *.log
+		rm *.aux
+		rm -r _minted*
+		mv *.pdf PDFs/src/
 	else
 		echo "'src' directory not found. PDFs of source files won't be created"
 	fi
