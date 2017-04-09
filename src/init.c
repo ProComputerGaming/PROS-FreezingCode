@@ -1,8 +1,8 @@
 #include "main.h"
 
 void initializeIO() {
-    pinMode(leftFingerSwitchPort, INPUT);
-    pinMode(rightFingerSwitchPort, INPUT);
+    pinMode(LEFT_CLAW_SWITCH_PORT, INPUT);
+    pinMode(RIGHT_CLAW_SWITCH_PORT, INPUT);
 }
 
 void initialize() {
@@ -10,8 +10,28 @@ void initialize() {
     lcdClear(uart1);
     lcdSetBacklight(uart1, 1);
 
-    gyroOne = gyroInit(gyroOnePort, 250);
-    gyroTwo = gyroInit(gyroTwoPort, 0);
+    initMotor(&backRight, BACK_RIGHT_PORT, MOTOR_DEFAULT_SLEW_RATE, true);
+    initMotor(&backLeft, BACK_LEFT_PORT, MOTOR_DEFAULT_SLEW_RATE, false);
+    initMotor(&frontLeft, FRONT_LEFT_PORT, MOTOR_DEFAULT_SLEW_RATE, true);
+    initMotor(&frontRight, FRONT_RIGHT_PORT, MOTOR_DEFAULT_SLEW_RATE, false);
+    initMotor(&liftOne, LIFT_ONE_PORT, MOTOR_DEFAULT_SLEW_RATE, false);
+    initMotor(&liftTwo, LIFT_TWO_PORT, MOTOR_DEFAULT_SLEW_RATE, false);
+    initMotor(&liftThree, LIFT_THREE_PORT, MOTOR_DEFAULT_SLEW_RATE, false);
+    initMotor(&claw, CLAW_PORT, MOTOR_DEFAULT_SLEW_RATE, true);
+
+    motors[0] = &backRight;
+    motors[1] = &backLeft;
+    motors[2] = &frontLeft;
+    motors[3] = &frontRight;
+    motors[4] = &liftOne;
+    motors[5] = &liftTwo;
+    motors[6] = &liftThree;
+    motors[7] = &claw;
+
+
+
+    gyroOne = gyroInit(GYRO_ONE_PORT, 250);
+    gyroTwo = gyroInit(GYRO_TWO_PORT, 0);
 
     WHEEL_CIR = PI * 4;
     TOLERANCE = .8;
@@ -23,7 +43,7 @@ void initialize() {
     DRIVEBASE_POWER = 63;
     CLAW_POWER = 127;
     LIFT_POWER = 127;
-    TURN_MULTIPLIER = .5;
+    TURN_MULTIPLIER = 1;
 
     wheelTargetTicks = 0;
     liftTargetTicks = 0;
@@ -41,32 +61,14 @@ void initialize() {
 
     useGyro = false;
 
-    liftQuad = encoderInit(liftQuadPort + 1, liftQuadPort, false);
-    rightQuad = encoderInit(rightQuadPort + 1, rightQuadPort, false);
-    leftQuad = encoderInit(leftQuadPort + 1, leftQuadPort, false);
+    liftQuad = encoderInit(LIFT_QUAD_PORT + 1, LIFT_QUAD_PORT, false);
+    rightQuad = encoderInit(RIGHT_QUAD_PORT + 1, RIGHT_QUAD_PORT, false);
+    leftQuad = encoderInit(LEFT_QUAD_PORT + 1, LEFT_QUAD_PORT, false);
 
     liftMonitorHandle = taskCreate(liftMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     wheelMonitorHandle = taskCreate(wheelMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     motorSlewHandle = taskCreate(motorSlewTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     clawMonitorHandle = taskCreate(clawMonitorTask, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-
-    motorReqMutex =   mutexCreate();
-    for(int i = 0; i < 10; i++){
-        motorMutexes[i] = mutexCreate();
-    }
-
-    runWheelsMutex = mutexCreate();
-    wheelDirMutex = mutexCreate();
-    driveTicksMutex = mutexCreate();
-
-    runLiftMutex = mutexCreate();
-    liftTicksMutex = mutexCreate();
-
-    runFingerMutex = mutexCreate();
-    downPressureMutex = mutexCreate();
-    clawClosingMutex = mutexCreate();
-
-    useGyroMutex = mutexCreate();
 
     autonSelection = programSelected(8);
 }

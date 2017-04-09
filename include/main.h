@@ -2,6 +2,10 @@
 #define MAIN_H_
 
 #include <API.h>
+#include "motor.h"
+#include "claw.h"
+#include "lift.h"
+#include "drive_base.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,105 +15,52 @@ extern "C" {
     #define OFF 0
 
     //Drive Motors
-    #define backRight 3
-    #define frontLeft 6
-    #define backLeft 7
-    #define frontRight 8
+    #define BACK_RIGHT_PORT 9
+    #define FRONT_LEFT_PORT 3
+    #define BACK_LEFT_PORT 6
+    #define FRONT_RIGHT_PORT 2
 
     //Lift Motors
-    #define lowerRightLift 2
-    #define upperLift 4
-    #define lowerLeftLift 9
+    #define LIFT_ONE_PORT 4
+    #define LIFT_TWO_PORT 7
+    #define LIFT_THREE_PORT 5
 
     //Claw Motors
-    #define fingerY 5
+    #define CLAW_PORT 8
 
     //Digital Sensors
-    #define liftQuadPort 1
-    #define leftFingerSwitchPort 3
-    #define rightFingerSwitchPort 4
-    #define rightQuadPort 5
-    #define leftQuadPort 7
+    #define LIFT_QUAD_PORT 1
+    #define LEFT_CLAW_SWITCH_PORT 3
+    #define RIGHT_CLAW_SWITCH_PORT 4
+    #define RIGHT_QUAD_PORT 5
+    #define LEFT_QUAD_PORT 7
 
     //Analog Sensors
-    #define gyroOnePort 5
-    #define gyroTwoPort 4
-    #define liftPot 6
-    #define potOne 7
-    #define potTwo 8
-
-    #define MOTOR_NUM 10
-    #define MOTOR_MAX_VALUE 127
-    #define MOTOR_MIN_VALUE -127
-    #define MOTOR_DEFAULT_SLEW_RATE 40
-    #define MOTOR_FAST_SLEW_RATE 256
-    #define MOTOR_TASK_DELAY 20
-    #define MOTOR_DEADBAND 10
+    #define GYRO_ONE_PORT 5
+    #define GYRO_TWO_PORT 4
+    #define POT_ONE_PORT 7
+    #define POT_TWO_PORT 8
 
     #define ANALOG_DEADZONE 10
 
+    #define MUTEX_TIMEOUT 100
     #define MID_HEIGHT 600
     #define HIGH_HEIGHT 650
     #define DOWN_HEIGHT 20
-
-    //bool initialized;
-
-    int motorSlew[MOTOR_NUM]; //Array containing the slew rates for each individual motor port
-    int motorReq[MOTOR_NUM]; //Array containing the requested speed for each indivual motor port (-127 to 127)
-
-    //Enumeration defining autonomous movement direction
-    enum WheelDirection{
-        FORWARD,
-        BACKWARD,
-        LEFT,
-        RIGHT,
-    };
-
-    //Theoretical Encoder Clicks for turning (Not accurate in practice due to wheels slipping)
-    float WHEEL_CIR;
-    float TOLERANCE;
-    int FULL;
-    int QUARTER;
-    int HALF;
-    int THREE_QUARTER;
-
-    //WheelMonitorTask variables
-    int wheelTargetTicks;
-    enum WheelDirection wheelDir;
-    bool runWheels;
-    int DRIVEBASE_POWER;
-    float TURN_MULTIPLIER;
-
-    //LiftMonitorTask variables
-    bool runLift;
-    int liftTargetTicks;
-    int LIFT_POWER;
-
-    bool liftPIDRunning;
-    float liftPGain;
-    float liftIGain;
-    float liftDGain;
-    float liftDerivative;
-    float lastLiftError;
-    int liftError;
-    int liftLastError;
-    int liftCumError;
-    int liftOutput;
-    float liftDeltaTime;
-
-
-    //ClawMonitorTask variables
-    bool downPressure;
-    bool runFinger;
-    bool fingerNeedsToOpen;
-    bool clawClosing;
-    bool clawDown;
-    int CLAW_POWER;
 
     //Index of the autonomous routine to run based on the two potentiometers mounted on the back of the robot
     int autonSelection;
 
     bool useGyro;
+
+    Motor backRight;
+    Motor backLeft;
+    Motor frontLeft;
+    Motor frontRight;
+    Motor liftOne;
+    Motor liftTwo;
+    Motor liftThree;
+    Motor claw;
 
     //Quadrature Encoders
     Encoder liftQuad;
@@ -125,49 +76,11 @@ extern "C" {
     TaskHandle motorSlewHandle;
     TaskHandle taskMonitorHandle;
 
-    Mutex motorReqMutex;
-    Mutex motorMutexes[10];
-
-    Mutex runWheelsMutex;
-    Mutex wheelDirMutex;
-    Mutex driveTicksMutex;
-
-    Mutex runLiftMutex;
-    Mutex liftTicksMutex;
-
-    Mutex runFingerMutex;
-    Mutex downPressureMutex;
-    Mutex clawClosingMutex;
-
-    Mutex useGyroMutex;
-
     int programSelected(int segments);
     int clamp(int var, int min, int max);
 
-    void motorSlewTask(void *parameter);
     void waitForTasks();
     void stopAllMotors();
-
-    void wheelMonitorTask(void *parameter);
-    void setSyncMove(enum WheelDirection d,int targetTicks, bool enableGyro);
-    void dLeft(bool backwards, bool bypassSlew);
-    void dRight(bool backwards, bool bypassSlew);
-    void strafeRight(int millis);
-    void strafeLeft(int millis);
-    void analogDrive();
-    void stopLeft();
-    void stopRight();
-    void stopDrive();
-
-    void liftMonitorTask(void *parameter);
-    void liftPID(void *parameter);
-    void setSyncLift(int targetTicks);
-    void dLift(bool down);
-    void stopLift();
-
-    void clawMonitorTask(void *parameter);
-    void closeClaw(int millis);
-    void openClaw();
 
     void zeroDriveSensors();
     void zeroAllSensors();
