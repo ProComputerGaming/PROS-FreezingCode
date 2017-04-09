@@ -1,6 +1,35 @@
 #ifndef DRIVE_BASE_H_
 #define DRIVE_BASE_H_
 
+#include <API.h>
+#include "motor.h"
+
+//Drive Motors
+#define BACK_RIGHT_PORT 9
+#define FRONT_LEFT_PORT 3
+#define BACK_LEFT_PORT 6
+#define FRONT_RIGHT_PORT 2
+
+//Digital Sensors
+#define RIGHT_QUAD_PORT 5
+#define LEFT_QUAD_PORT 7
+
+//Analog Sensors
+#define GYRO_ONE_PORT 5
+#define GYRO_TWO_PORT 4
+
+#define ANALOG_DEADZONE 10
+
+Motor backRight;
+Motor backLeft;
+Motor frontLeft;
+Motor frontRight;
+
+Encoder rightQuad;
+Encoder leftQuad;
+Gyro gyroOne;
+Gyro gyroTwo;
+
 //Enumeration defining autonomous movement direction
 enum WheelDirection{
     FORWARD,
@@ -21,10 +50,12 @@ int THREE_QUARTER;
 
 //WheelMonitorTask variables
 int wheelTargetTicks;
-
 bool runWheels;
-int DRIVEBASE_POWER;
+bool useGyro;
 float TURN_MULTIPLIER;
+int DRIVEBASE_POWER;
+
+TaskHandle wheelMonitorHandle;
 
 void wheelMonitorTask(void *parameter);
 void setSyncMove(enum WheelDirection d,int targetTicks, bool enableGyro);

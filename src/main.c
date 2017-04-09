@@ -19,9 +19,7 @@ void stopAllMotors(){
     stopDrive();
     stopLift();
 
-    mutexTake(claw.mutex, MUTEX_TIMEOUT);
-    motorStop(CLAW_PORT);
-    mutexGive(claw.mutex);
+    setMotor(&claw, 0);
 }
 
 void zeroDriveSensors(){

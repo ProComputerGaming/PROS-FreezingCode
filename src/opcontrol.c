@@ -25,7 +25,7 @@ void operatorControl() {
 			dLift(true);
 		}else{
 			if(!runLift)
-				stopLift();
+			stopLift();
 		}
 
 		if(joystickGetDigital(1, 5, JOY_DOWN)){

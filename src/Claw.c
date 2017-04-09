@@ -8,7 +8,7 @@ void clawMonitorTask(void *parameter){
 
         bool open = (digitalRead(LEFT_CLAW_SWITCH_PORT) == 1 || digitalRead(RIGHT_CLAW_SWITCH_PORT) == 1);
 
-        if(closing == false){ //If in Auto and CLAW_PORT is not closing
+        if(closing == false){
             if(run == false){
                 if(down == true){
                     setMotor(&claw, 15);

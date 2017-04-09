@@ -41,7 +41,6 @@ void motorSlewTask(void *parameter){
                 }
                 motors[motorIndex]->speed = motorTmp;
                 motorSet(motors[motorIndex]->port, motorTmp);
-                printf("Motor Port: %d, Speed: %d\n", motorIndex + 1, motorTmp);
             }
         }
         delay( MOTOR_TASK_DELAY );
@@ -54,15 +53,17 @@ void initMotor(Motor *motor, int port, int slewRate, bool reversed){
     motor->requestedSpeed = 0;
     motor->slewRate = slewRate;
     motor->port = port;
-    motor->index = port - 1;
     motor->reversed = reversed;
 }
 
 bool setMotor(Motor *motor, int speed){
     if(motor->port < 1 || motor->port > 10) return false;
+
     if(speed > 127) speed = 127;
     if(speed < -127) speed = -127;
     if(motor->reversed) speed = -speed;
+
     motor->requestedSpeed = speed;
+
     return true;
 }
