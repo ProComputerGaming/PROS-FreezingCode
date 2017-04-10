@@ -7,9 +7,9 @@ void initializeIO() {
 
 void initialize() {
 
-  WHEEL_CIR = PI * 4;
-  TOLERANCE = .8;
-  FULL = (int)((360/WHEEL_CIR)*(PI*14.25) * TOLERANCE);
+  WHEEL_CIR = (int)(PI * 3.25);
+  TOLERANCE = 1;
+  FULL = (int)((360/WHEEL_CIR)*(PI*21.22) * TOLERANCE);
   QUARTER = FULL / 4;
   HALF = FULL / 2;
   THREE_QUARTER = FULL / 1.5;

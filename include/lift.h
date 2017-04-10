@@ -12,9 +12,9 @@
 //Digital Sensors
 #define LIFT_QUAD_PORT 1
 
-#define HIGH_HEIGHT 1
-#define MID_HEIGHT 1
-#define DOWN_HEIGHT 1
+#define HIGH_HEIGHT 930
+#define MID_HEIGHT 650
+#define DOWN_HEIGHT 15
 
 Motor liftOne;
 Motor liftTwo;
