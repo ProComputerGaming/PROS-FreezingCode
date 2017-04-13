@@ -11,9 +11,9 @@ void clawMonitorTask(void *parameter){
         if(closing == false){
             if(run == false){
                 if(down == true){
-                    setMotor(&claw, 15);
+                    setMotor(&claw, 25);
                 }else if(down == false){
-                    setMotor(&claw, -5);
+                    setMotor(&claw, 0);
                 }else{
                     open = (digitalRead(LEFT_CLAW_SWITCH_PORT) == 1 || digitalRead(RIGHT_CLAW_SWITCH_PORT) == 1);
                 }
@@ -49,6 +49,7 @@ void closeClaw(int millis){
         setMotor(&claw, 0);
 
         clawClosing = false;
+
     }else{
         setMotor(&claw, CLAW_POWER);
     }

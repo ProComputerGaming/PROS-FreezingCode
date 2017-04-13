@@ -3,7 +3,7 @@
 void autonZero(){
     //Left
     DRIVEBASE_POWER = 127;
-    setSyncMove(FORWARD, 400, false);
+    setSyncMove(FORWARD, 425 * 1.546, false);
     waitForTasks();
     DRIVEBASE_POWER = 63;
     setSyncMove(RIGHT, QUARTER, false);
@@ -11,19 +11,19 @@ void autonZero(){
     openClaw();
     waitForTasks();
     DRIVEBASE_POWER = 127;
-    setSyncMove(FORWARD, 430, false);
+    setSyncMove(FORWARD, 450 * 1.546, false);
     waitForTasks();
-    closeClaw(300);
-    setSyncLift(HIGH_HEIGHT - 110);
-    waitForTasks();
-    DRIVEBASE_POWER = 63;
-    setSyncMove(LEFT, QUARTER, false);
+    closeClaw(400);
+    setSyncLift(HIGH_HEIGHT);
     waitForTasks();
     DRIVEBASE_POWER = 63;
-    setSyncMove(FORWARD, 475, false);
+    setSyncMove(LEFT, QUARTER * .85, false);
+    waitForTasks();
+    DRIVEBASE_POWER = 63;
+    setSyncMove(FORWARD, 500 * 1.546, false);
     waitForTasks();
     openClaw();
-    setSyncLift(HIGH_HEIGHT + 40);
+    setSyncLift(HIGH_HEIGHT + 30);
 }
 
 void autonOne(){
@@ -31,19 +31,20 @@ void autonOne(){
 
     waitForTasks();
     DRIVEBASE_POWER = 127;
-    setSyncMove(BACKWARD, 300, false);
+    setSyncMove(BACKWARD, 300 * 1.546, false);
     waitForTasks();
     DRIVEBASE_POWER = 63;
-    setSyncMove(RIGHT, HALF + 85, false);
+    setSyncMove(RIGHT, HALF, false);
     waitForTasks();
     DRIVEBASE_POWER = 127;
-    setSyncMove(BACKWARD, 75, false);
+    setSyncMove(BACKWARD, 125 * 1.546, false);
+    waitForTasks();
     setSyncLift(DOWN_HEIGHT);
     waitForTasks();
-    setSyncMove(FORWARD, 350, false);
+    setSyncMove(FORWARD, 450 * 1.546, false);
     waitForTasks();
-    closeClaw(400);
-    setSyncMove(BACKWARD, 100, false);
+    closeClaw(500);
+    setSyncMove(BACKWARD, 100 * 1.546, false);
     waitForTasks();
     setSyncLift(HIGH_HEIGHT);
     waitForTasks();
@@ -51,9 +52,8 @@ void autonOne(){
     setSyncMove(LEFT, HALF, false);
     waitForTasks();
     DRIVEBASE_POWER = 127;
-    setSyncMove(FORWARD, 400, false);
+    setSyncMove(FORWARD, 600 * 1.546, false);
     waitForTasks();
-    setSyncMove(FORWARD, 75, false);
     openClaw();
     waitForTasks();
 }

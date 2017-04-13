@@ -16,7 +16,7 @@ void operatorControl() {
 		if(millis() - lastTime > 100){
 			lastTime = millis();
 			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
-			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, abs(encoderGet(liftQuad)));
+			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, autonSelection);
 		}
 
 		if(joystickGetDigital(1, 6, JOY_UP)){

@@ -7,6 +7,7 @@ void initializeIO() {
 
 void initialize() {
 
+    //1.5456 is the multiplier from old diameter to new diameter
   WHEEL_CIR = (int)(PI * 3.25);
   TOLERANCE = 1;
   FULL = (int)((360/WHEEL_CIR)*(PI*21.22) * TOLERANCE);
