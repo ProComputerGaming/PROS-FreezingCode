@@ -19,9 +19,9 @@ void operatorControl() {
 			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, autonSelection);
 		}
 
-		if(joystickGetDigital(1, 6, JOY_UP)){
+		if(joystickGetDigital(1, 6, JOY_UP) && abs(encoderGet(liftQuad)) < HIGH_HEIGHT){
 			dLift(false);
-		}else if(joystickGetDigital(1, 6, JOY_DOWN)){
+		}else if(joystickGetDigital(1, 6, JOY_DOWN) && abs(encoderGet(liftQuad)) > DOWN_HEIGHT){
 			dLift(true);
 		}else{
 			if(!runLift)

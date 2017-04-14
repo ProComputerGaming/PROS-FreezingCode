@@ -25,10 +25,10 @@ void wheelMonitorTask(void *parameter){
             if(gyro){
                 if((!leftDone || !rightDone) && !gyroStepOne){
                     targetOffset =  abs(target) < 45 ? 30 : abs(target * .6);
-                    if(gyroAverage < target - (targetOffset)){
+                    if(gyroAverage < target - targetOffset){
                         dLeft(true);
                         dRight(false);
-                    }else if(gyroAverage > target + (targetOffset)){
+                    }else if(gyroAverage > target + targetOffset){
                         dLeft(false);
                         dRight(true);
                     }else{
@@ -37,7 +37,7 @@ void wheelMonitorTask(void *parameter){
                         delay(400);
                     }
                 }else if((!leftDone || !rightDone) && !gyroStepTwo){
-                    DRIVEBASE_POWER /= 2;
+                    DRIVEBASE_POWER = (int)((double)DRIVEBASE_POWER * .55);
                     if(gyroAverage < target){
                         dLeft(true);
                         dRight(false);
@@ -47,7 +47,7 @@ void wheelMonitorTask(void *parameter){
                     }else{
                         gyroStepTwo = true;
                     }
-                    DRIVEBASE_POWER *= 2;
+                    DRIVEBASE_POWER /= .55;
                 }else{
 
                     leftDone = true;
@@ -103,9 +103,9 @@ void wheelMonitorTask(void *parameter){
                 stopDrive();
             }
 
-            delay(20);
+            delay(1);
         }
-        delay(20);
+        delay(1);
     }
 }
 
