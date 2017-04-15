@@ -18,7 +18,7 @@ void initialize() {
   DRIVEBASE_POWER = 63;
   CLAW_POWER = 127;
   LIFT_POWER = 127;
-  TURN_MULTIPLIER = 1;
+  TURN_MULTIPLIER = .5;
 
   wheelTargetTicks = 0;
   liftTargetTicks = 0;

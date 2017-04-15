@@ -21,7 +21,7 @@ bool clawDown;
 int CLAW_POWER;
 
   TaskHandle clawMonitorHandle;
-  
+
     void clawMonitorTask(void *parameter);
     void closeClaw(int millis);
     void openClaw();

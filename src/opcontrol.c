@@ -15,7 +15,7 @@ void operatorControl() {
 
 		if(millis() - lastTime > 100){
 			lastTime = millis();
-			lcdPrint(uart1, 1, "%d, %d", gyroGet(gyroOne), gyroGet(gyroTwo));
+			lcdPrint(uart1, 1, "%d, %d, %d", digitalRead(LEFT_CLAW_SWITCH_PORT), digitalRead(RIGHT_CLAW_SWITCH_PORT), encoderGet(liftQuad));
 			lcdPrint(uart1, 2, "%d, %d", abs((gyroGet(gyroOne) + gyroGet(gyroTwo))) / 2, autonSelection);
 		}
 
